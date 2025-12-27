@@ -161,7 +161,10 @@ if (error) {
                       </span>
                     ))}
                   </div>
-                  <button class="featured-view-btn">View Details</button>
+                  <button onClick={() => {
+                        setSelectedProject(project);
+                        setCurrentImageIndex(0);
+                      }} class="featured-view-btn">View Details</button>
                 </div>
               </div>
             ))}
