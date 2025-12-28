@@ -10,7 +10,7 @@ import "./home.css";
 
 const Hero = () => {
   const handleDownloadCV = () => {
-     window.open('https://d1jd6j7xdf8x95.cloudfront.net/images/resume.pdf', '_blank');
+     window.open('https://d1jd6j7xdf8x95.cloudfront.net/images/Ravibhushan_CV.pdf', '_blank');
   };
 
   return (
