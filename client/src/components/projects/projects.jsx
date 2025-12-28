@@ -55,7 +55,7 @@ const Projects = () => {
           </div>
           <div className="loading-container">
             <Loader size={50} className="loading-spinner" />
-            <p className="loading-text">Loading projects...</p>
+            <p className="loading-text">Loading projects from backend...</p>
           </div>
         </div>
       </section>
@@ -214,7 +214,7 @@ if (error) {
                     e.target.src = "https://via.placeholder.com/600x400?text=Image+Not+Found";
                   }}
                 />
-
+               
                 {selectedProject.images && selectedProject.images.length > 1 && (
                   <>
                     <button
