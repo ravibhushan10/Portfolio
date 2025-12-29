@@ -13,7 +13,7 @@ export default function Skills() {
   const [activeFilter, setActiveFilter] = useState("all");
   const [isSkillsVisible, setIsSkillsVisible] = useState(false);
 
-  // Auto-detect when skills section is visible
+
   useEffect(() => {
     const skillsSection = document.getElementById("skills");
 
