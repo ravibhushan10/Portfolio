@@ -56,9 +56,15 @@ const projectSchema = new mongoose.Schema(
     live: {
       type: String,
       required: [true, 'Please add live demo URL']
+    },
+    // ADD THIS FIELD
+    order: {
+      type: Number,
+      default: 999, // Default high number so new projects appear at end
+      required: true
     }
   },
-  { timestamps: true }
+  // { timestamps: true }
 );
 
 module.exports = mongoose.model('Project', projectSchema);

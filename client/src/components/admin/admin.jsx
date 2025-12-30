@@ -31,7 +31,8 @@ const AdminDashboard = () => {
     futureImprovements: [""],
     github: "",
     documentation: "",
-    live: ""
+    live: "",
+    order: 999 // Added order field
   });
 
   // ==================== HELPER FUNCTION ====================
@@ -116,6 +117,7 @@ const AdminDashboard = () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           ...formData,
+          order: parseInt(formData.order) || 999,
           images: formData.images.filter(img => img),
           tags: formData.tags.filter(tag => tag),
           features: formData.features.filter(f => f),
@@ -151,6 +153,7 @@ const AdminDashboard = () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           ...formData,
+          order: parseInt(formData.order) || 999,
           images: formData.images.filter(img => img),
           tags: formData.tags.filter(tag => tag),
           features: formData.features.filter(f => f),
@@ -211,7 +214,8 @@ const AdminDashboard = () => {
       futureImprovements: project.futureImprovements || [""],
       github: project.github,
       documentation: project.documentation,
-      live: project.live
+      live: project.live,
+      order: project.order || 999
     });
     setActiveTab("edit");
   };
@@ -230,7 +234,8 @@ const AdminDashboard = () => {
       futureImprovements: [""],
       github: "",
       documentation: "",
-      live: ""
+      live: "",
+      order: 999
     });
     setEditingProject(null);
   };
@@ -331,7 +336,17 @@ const AdminDashboard = () => {
                 {projects.map(project => (
                   <div key={project._id} className="admin-project-card">
                     <div className="admin-project-info">
-                      <h3 className="admin-project-title">{project.title}</h3>
+                      <h3 className="admin-project-title">
+                        {project.title}
+                        <span style={{
+                          marginLeft: '10px',
+                          fontSize: '0.9rem',
+                          color: '#666',
+                          fontWeight: 'normal'
+                        }}>
+                          (Order: {project.order || 999})
+                        </span>
+                      </h3>
                       <p className="admin-project-desc">{project.description}</p>
                     </div>
                     <div className="admin-project-actions">
@@ -652,6 +667,33 @@ const AdminDashboard = () => {
                     className="admin-input"
                     required
                   />
+                </div>
+              </div>
+
+              {/* ORDER SECTION - NEW */}
+              <div className="admin-section">
+                <h3 className="admin-section-title">Display Order</h3>
+
+                <div className="admin-form-group">
+                  <label className="admin-label">Order Position *</label>
+                  <input
+                    type="number"
+                    name="order"
+                    value={formData.order}
+                    onChange={handleInputChange}
+                    placeholder="e.g., 1 for first position"
+                    className="admin-input"
+                    min="1"
+                    required
+                  />
+                  <p style={{
+                    fontSize: '0.85rem',
+                    color: '#666',
+                    marginTop: '8px',
+                    fontStyle: 'italic'
+                  }}>
+                    Lower numbers appear first (1, 2, 3...). Default is 999 (appears last).
+                  </p>
                 </div>
               </div>
 
