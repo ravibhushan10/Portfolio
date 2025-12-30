@@ -5,7 +5,6 @@ import "./admin.css";
 const AdminDashboard = () => {
   const API_BASE_URL = import.meta.env.VITE_API_URL;
   const ADMIN_PASSWORD = import.meta.env.VITE_ADMIN_PASSWORD;
-  console.log(ADMIN_PASSWORD);
 
   // ==================== STATE ====================
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -273,7 +272,7 @@ const AdminDashboard = () => {
                   onClick={() => setShowPassword(!showPassword)}
                   className="admin-eye-btn"
                 >
-                  {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                  {showPassword ? <Eye size={20} /> : <EyeOff size={20} />}
                 </button>
               </div>
             </div>
