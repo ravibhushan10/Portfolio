@@ -38,16 +38,20 @@ A modern, full-stack personal portfolio website with admin dashboard for dynamic
   </tr>
    <tr>
     <td align="center">
-      <img src="screenshots/sixth.png" ><br/>
+      <img src="screenshots/fifth(2).png" ><br/>
       <em>Admin login</em>
     </td>
      <td align="center">
-      <img src="screenshots/seventh.png" ><br/>
+      <img src="screenshots/sixth.png" ><br/>
       <em>Admin dashboard</em>
     </td>
   </tr>
    <tr>
     <td align="center">
+      <img src="screenshots/seventh.png" ><br/>
+      <em>Admin dashboard</em>
+    </td>
+     <td align="center">
       <img src="screenshots/eight.png" ><br/>
       <em>Admin dashboard</em>
     </td>
@@ -308,4 +312,5 @@ A modern, full-stack personal portfolio website with admin dashboard for dynamic
 </div>
 
 ---
+
 
