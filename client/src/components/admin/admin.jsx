@@ -17,6 +17,8 @@ const AdminDashboard = () => {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState({ type: "", text: "" });
   const [editingProject, setEditingProject] = useState(null);
+  const [error, setError] = useState("");
+
 
   const [formData, setFormData] = useState({
     title: "",
@@ -35,21 +37,18 @@ const AdminDashboard = () => {
   });
 
   // ==================== LOGIN ====================
-  const handleLogin = (e) => {
+ const handleLogin = (e) => {
     e.preventDefault();
+
     if (password === ADMIN_PASSWORD) {
       setIsAuthenticated(true);
       setPassword("");
-      showMessage("success", "✅ Login successful!");
-      fetchProjects();
+      setError("");
     } else {
-      showMessage("error", "❌ Incorrect password!");
+      setError("❌ Incorrect password. Please try again.");
+      setPassword("");
+      setTimeout(() => setError(""), 3000);
     }
-  };
-
-  const showMessage = (type, text) => {
-    setMessage({ type, text });
-    setTimeout(() => setMessage({ type: "", text: "" }), 3000);
   };
 
   // ==================== FETCH PROJECTS ====================
@@ -239,6 +238,7 @@ const AdminDashboard = () => {
         <div className="admin-login-box">
           <h1 className="admin-login-title">🔐 Admin Access</h1>
           <p className="admin-login-subtitle">Enter password to manage projects</p>
+          {error && <p className="admin-error-text">{error}</p>}
 
           <form onSubmit={handleLogin} className="admin-form">
             <div className="admin-input-group">
@@ -269,6 +269,8 @@ const AdminDashboard = () => {
       </div>
     );
   }
+
+
 
   // ==================== DASHBOARD ====================
   return (
