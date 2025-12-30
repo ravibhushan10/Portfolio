@@ -33,7 +33,7 @@
 .featured-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 4rem;
+  gap: 5.5rem;
   margin: 3rem;
 }
 
@@ -42,8 +42,8 @@
 .featured-card {
   background: rgba(23, 29, 41, 0.5);
   border: 1px solid rgba(59, 130, 246, 0.5);
-  border-radius: 1rem;
-  padding: 1rem;
+  border-radius: 0.7rem;
+  padding: 0.6rem;
   transition: all 0.3s ease;
   position: relative;
   cursor: default;
@@ -74,13 +74,13 @@
 
 .featured-image {
   width: 100%;
-  height: 160px;
+  height: 180px;
   overflow: hidden;
   position: relative;
   z-index: 1;
   border: 1px solid #333;
   border-radius: 0.7rem;
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem;
 }
 
 .featured-image img {
@@ -192,7 +192,7 @@
   font-size: 1.1rem;
   font-weight: 700;
   color: #ffffff;
-  margin-bottom: 0.75rem;
+  margin-bottom: 0.15rem;
 }
 
 .featured-card-desc {
@@ -216,15 +216,15 @@
   background: rgba(6, 182, 212, 0.1);
   border: 1px solid rgba(6, 182, 212, 0.3);
   color: #22d3ee;
-  font-size: 0.7rem;
-  border-radius: 0.4rem;
+  font-size: 0.65rem;
+  border-radius: 0.35rem;
 }
 
 /* ==================== VIEW DETAILS BUTTON ==================== */
 
 .featured-view-btn {
   width: 100%;
-  padding: 0.75rem 1rem;
+  padding: 0.65rem 1rem;
 background: linear-gradient(135deg, #6488bb, #161e36);
 color: #FFFFFF;
   border: 1px solid rgba(59, 130, 246, 0.5);

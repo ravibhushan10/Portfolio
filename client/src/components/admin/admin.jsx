@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { Trash2, Plus, LogOut, Eye, EyeOff, Edit2,LayoutDashboard} from "lucide-react";
+import { Trash2, Plus, LogOut, Eye, EyeOff, Edit2, LayoutDashboard } from "lucide-react";
 import "./admin.css";
-
 
 const AdminDashboard = () => {
   const API_BASE_URL = import.meta.env.VITE_API_URL;
@@ -19,7 +18,6 @@ const AdminDashboard = () => {
   const [editingProject, setEditingProject] = useState(null);
   const [error, setError] = useState("");
 
-
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -36,8 +34,21 @@ const AdminDashboard = () => {
     live: ""
   });
 
+  // ==================== HELPER FUNCTION ====================
+  const showMessage = (type, text) => {
+    setMessage({ type, text });
+    setTimeout(() => setMessage({ type: "", text: "" }), 3000);
+  };
+
+  // ==================== FETCH PROJECTS ON MOUNT ====================
+  useEffect(() => {
+    if (isAuthenticated) {
+      fetchProjects();
+    }
+  }, [isAuthenticated]);
+
   // ==================== LOGIN ====================
- const handleLogin = (e) => {
+  const handleLogin = (e) => {
     e.preventDefault();
 
     if (password === ADMIN_PASSWORD) {
@@ -270,14 +281,12 @@ const AdminDashboard = () => {
     );
   }
 
-
-
   // ==================== DASHBOARD ====================
   return (
     <div className="admin-dashboard-container">
       {/* Header */}
       <header className="admin-header">
-        <h1 className="admin-header-title"> <LayoutDashboard/> Admin Dashboard</h1>
+        <h1 className="admin-header-title"><LayoutDashboard /> Admin Dashboard</h1>
         <button onClick={handleLogout} className="admin-logout-btn">
           <LogOut size={18} /> Logout
         </button>
@@ -421,7 +430,6 @@ const AdminDashboard = () => {
                       onChange={(e) => handleArrayChange("images", index, e.target.value)}
                       placeholder="Image URL"
                       className="admin-input"
-                      required
                     />
                     {formData.images.length > 1 && (
                       <button
@@ -648,7 +656,7 @@ const AdminDashboard = () => {
               </div>
 
               <button type="submit" className="admin-submit-btn" disabled={loading}>
-                {loading ? "Processing..." : (activeTab === "add" ? " Add Project" : " Update Project")}
+                {loading ? "Processing..." : (activeTab === "add" ? "Add Project" : "Update Project")}
               </button>
             </form>
           </div>
