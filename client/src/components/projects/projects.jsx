@@ -28,7 +28,6 @@ const Projects = () => {
         }
 
         const data = await response.json();
-        console.log("Projects loaded:", data.length);
         setProjects(data);
       } catch (err) {
         console.error("Error fetching projects:", err);
@@ -214,7 +213,7 @@ if (error) {
                     e.target.src = "https://via.placeholder.com/600x400?text=Image+Not+Found";
                   }}
                 />
-               
+
                 {selectedProject.images && selectedProject.images.length > 1 && (
                   <>
                     <button
