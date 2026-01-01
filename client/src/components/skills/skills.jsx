@@ -75,7 +75,7 @@ export default function Skills() {
     ],
     tools: [
       { name: "AWS", icon: <FaAws />, category: "tools" },
-      { name: "Docker", icon: <FaDocker />, category: "tools" },
+      // { name: "Docker", icon: <FaDocker />, category: "tools" },
       { name: "Git", icon: <FaGit />, category: "tools" },
       { name: "GitHub", icon: <FaGithub />, category: "tools" },
       { name: "Postman", icon: <SiPostman />, category: "tools" },
@@ -86,7 +86,7 @@ export default function Skills() {
       { name: "C", icon: <SiC />, category: "programming" },
       { name: "C++", icon: < SiCplusplus />, category: "programming" },
       { name: "JavaScript", icon: <SiJavascript />, category: "programming" },
-      { name: "Python", icon: <SiPython />, category: "programming" },
+      // { name: "Python", icon: <SiPython />, category: "programming" },
       { name: "SQL", icon: <SiSqlite/>, category: "programming" },
     ],
   };
@@ -102,7 +102,7 @@ export default function Skills() {
 
   const filters = [
     { id: "all", label: "All Skills" },
-    { id: "programming", label: "Programming Language" },
+    { id: "programming", label: "Programming Languages" },
     { id: "frontend", label: "Frontend" },
     { id: "backend", label: "Backend" },
     { id: "tools", label: "Tools & DevOps" },
@@ -120,7 +120,7 @@ export default function Skills() {
         <div className="skills-header">
           <h2 className="skills-title">Skills & Technologies</h2>
           <p className="skills-intro">
-            Technologies and tools I use to build scalable and impactful solutions
+            Core technologies and tools leveraged to build scalable, efficient, and impactful solutions.
           </p>
         </div>
 

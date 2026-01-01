@@ -39,8 +39,6 @@ const Hero = () => {
                     2000,
                     "Problem Solver",
                     2000,
-                    "Tech Enthusiast",
-                    2000,
                   ]}
                   wrapper="span"
                   speed={50}
@@ -51,9 +49,7 @@ const Hero = () => {
             </div>
 
             <p className="hero__description">
-              I craft scalable and impactful solutions by solving complex system
-              challenges, striving to enhance user experiences. And I love to
-              learn new technologies and improve myself.
+             I develop web applications with a focus on performance, usability, and maintainable code. I continuously learn and adapt to new tools and technologies.
             </p>
 
             <div className="hero__buttons">

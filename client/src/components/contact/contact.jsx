@@ -151,8 +151,7 @@ const Contact = () => {
             <div className="contact__header">
               <h2 className="contact__title">Get In Touch</h2>
               <p className="contact__intro">
-                Have questions about my work? Want to discuss a project? I'm here
-                to help you bring your ideas to life.
+                Have questions about my work or want to discuss a project? I’m always open to meaningful collaboration.
               </p>
             </div>
 
