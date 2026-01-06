@@ -14,7 +14,6 @@ A modern, full-stack personal portfolio website with admin dashboard for dynamic
       <em>Projects section</em>
     </td>
   </tr>
-
   <tr>
     <td align="center">
       <img src="screenshots/second.png" ><br/>
@@ -25,7 +24,6 @@ A modern, full-stack personal portfolio website with admin dashboard for dynamic
       <em>View details section</em>
     </td>
   </tr>
-
   <tr>
     <td align="center">
       <img src="screenshots/fourth.png" ><br/>
@@ -236,7 +234,7 @@ A modern, full-stack personal portfolio website with admin dashboard for dynamic
    - Select project to delete
    - Confirm deletion
    - Project removed from portfolio
-     
+
 
 ## 🤝 Contributing
 
@@ -295,16 +293,13 @@ A modern, full-stack personal portfolio website with admin dashboard for dynamic
 
 ---
 <div align="center">
-   
+
 ### ⭐ Star this repository if it helped you!
 **Made with ❤️ by Ravi Bhushan**
-   
-   
+
+
 [Live Demo](https://ravibhushan-portfolio.vercel.app) · [Report Bug](https://github.com/ravibhushan10/Portfolio/issues) · [Request Feature](https://github.com/ravibhushan10/Portfolio/issues)
 
 </div>
 
 ---
-
-
-
