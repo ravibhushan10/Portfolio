@@ -31,8 +31,9 @@ const Projects = () => {
       try {
         setLoading(true);
         setError(null);
-
+        console.time('Projects Fetch Time');
         const response = await fetch(`${API_BASE_URL}/projects`);
+        console.timeEnd('Projects end Time');
 
         if (!response.ok) {
           throw new Error(`Failed to fetch projects: ${response.status}`);
