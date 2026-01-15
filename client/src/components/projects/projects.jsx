@@ -145,6 +145,7 @@ const Projects = () => {
                     src={project.img}
                     alt={project.title}
                     loading="lazy"
+                    decoding="async"
                     onError={(e) => {
                       e.target.src =
                         "https://via.placeholder.com/400x300?text=Image+Not+Found";
@@ -240,6 +241,7 @@ const Projects = () => {
                   src={selectedProject.images?.[currentImageIndex]}
                   alt="project"
                   loading="lazy"
+                  decoding="async"
                   onError={(e) => {
                     e.target.src =
                       "https://via.placeholder.com/600x400?text=Image+Not+Found";
