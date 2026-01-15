@@ -17,7 +17,7 @@ const Projects = () => {
   const PROJECTS_PER_LOAD = 3;
   const API_BASE_URL = import.meta.env.VITE_API_URL;
 
-  // ==================== STATE ====================
+
   const [visibleCount, setVisibleCount] = useState(PROJECTS_PER_LOAD);
   const [selectedProject, setSelectedProject] = useState(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -26,7 +26,6 @@ const Projects = () => {
   const [error, setError] = useState(null);
   const [loadingFullProject, setLoadingFullProject] = useState(false);
 
-  // ==================== FETCH PROJECTS LIST ====================
   useEffect(() => {
     const fetchProjects = async () => {
       try {
@@ -42,8 +41,6 @@ const Projects = () => {
         const data = await response.json();
         setProjects(data);
       } catch (err) {
-        console.error("Error fetching projects:", err);
-        console.error("API URL:", `${API_BASE_URL}/projects`);
         setError(err.message);
         setProjects([]);
       } finally {
@@ -54,16 +51,12 @@ const Projects = () => {
     fetchProjects();
   }, []);
 
-  // ==================== FETCH FULL PROJECT DETAILS ====================
   const handleViewDetails = async (project) => {
-    // If project already has full details, just show it
     if (project.fullDescription && project.images) {
       setSelectedProject(project);
       setCurrentImageIndex(0);
       return;
     }
-
-    // Otherwise, fetch full details
     try {
       setLoadingFullProject(true);
       const response = await fetch(`${API_BASE_URL}/projects/${project._id}`);
@@ -73,8 +66,6 @@ const Projects = () => {
       }
 
       const fullProject = await response.json();
-
-      // Update the project in the list with full details
       setProjects((prev) =>
         prev.map((p) => (p._id === fullProject._id ? fullProject : p))
       );
@@ -82,14 +73,11 @@ const Projects = () => {
       setSelectedProject(fullProject);
       setCurrentImageIndex(0);
     } catch (err) {
-      console.error("Error fetching project details:", err);
       alert("Failed to load project details. Please try again.");
     } finally {
       setLoadingFullProject(false);
     }
   };
-
-  // ==================== RENDER LOADING ====================
   if (loading) {
     return (
       <section className="featured-section" id="projects">
@@ -109,7 +97,6 @@ const Projects = () => {
     );
   }
 
-  // ==================== RENDER ERROR ====================
   if (error) {
     return (
       <section className="featured-section" id="projects">
@@ -123,7 +110,7 @@ const Projects = () => {
           <div className="error-container">
             <div className="error-box">
               <div className="error-header">
-                <p className="error-text">Error: {error}</p>
+                <p className="error-text">Error: Failed to fetch projects.</p>
                 <button
                   className="error-close-btn"
                   onClick={() => setError(null)}
@@ -138,10 +125,8 @@ const Projects = () => {
     );
   }
 
-  // ==================== RENDER PROJECTS ====================
   return (
     <>
-      {/* PROJECT GRID */}
       <section className="featured-section" id="projects">
         <div className="featured-container">
           <div className="featured-header">
@@ -158,7 +143,7 @@ const Projects = () => {
                   <img
                     src={project.img}
                     alt={project.title}
-                    loading="lazy" // LAZY LOAD IMAGES
+                    loading="lazy"
                     onError={(e) => {
                       e.target.src =
                         "https://via.placeholder.com/400x300?text=Image+Not+Found";
@@ -220,8 +205,6 @@ const Projects = () => {
               </div>
             ))}
           </div>
-
-          {/* LOAD MORE BUTTON */}
           {visibleCount < projects.length && (
             <div className="featured-cta">
               <button
@@ -234,15 +217,11 @@ const Projects = () => {
               </button>
             </div>
           )}
-
-          {/* END OF PROJECTS */}
           {visibleCount >= projects.length && projects.length > 0 && (
             <div className="projects-end-text">End of projects</div>
           )}
         </div>
       </section>
-
-      {/* MODAL */}
       {selectedProject && (
         <div
           className="project-modal-overlay"
@@ -255,12 +234,11 @@ const Projects = () => {
             </div>
 
             <div className="modal-scrollable">
-              {/* IMAGE SLIDER */}
               <div className="project-slider">
                 <img
                   src={selectedProject.images?.[currentImageIndex]}
                   alt="project"
-                  loading="lazy" // LAZY LOAD MODAL IMAGES
+                  loading="lazy"
                   onError={(e) => {
                     e.target.src =
                       "https://via.placeholder.com/600x400?text=Image+Not+Found";
@@ -296,8 +274,6 @@ const Projects = () => {
                     </>
                   )}
               </div>
-
-              {/* DESCRIPTION */}
               <div className="description">
                 <h4
                   style={{
@@ -311,8 +287,6 @@ const Projects = () => {
                 </h4>
                 <p>{selectedProject.fullDescription}</p>
               </div>
-
-              {/* DETAILS GRID */}
               <div className="project-details-grid">
                 <section>
                   <h4
