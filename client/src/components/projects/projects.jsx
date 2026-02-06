@@ -301,7 +301,7 @@ const Projects = () => {
                   >
                     <CheckCircle size={18} className="cir-logo" /> Features
                   </h4>
-                  <ul style={{ "--bullet-color": "rgb(1, 255, 1)" }}>
+                  <ul style={{ "--bullet-color": "rgb(17, 205, 17)" }}>
                     {selectedProject.features &&
                       selectedProject.features.map((f, i) => (
                         <li key={i}>{f}</li>
@@ -319,7 +319,7 @@ const Projects = () => {
                   >
                     <Code size={18} className="cod-logo" /> Tech Stack
                   </h4>
-                  <ul style={{ "--bullet-color": "#6eacfc" }}>
+                  <ul style={{ "--bullet-color": "#006eff" }}>
                     {selectedProject.techStack &&
                       selectedProject.techStack.map((t, i) => (
                         <li key={i}>{t}</li>
@@ -337,7 +337,7 @@ const Projects = () => {
                   >
                     <Lightbulb size={18} className="bra-logo" /> Key Learnings
                   </h4>
-                  <ul style={{ "--bullet-color": "#f7df03" }}>
+                  <ul style={{ "--bullet-color": "#000000" }}>
                     {selectedProject.keyLearnings &&
                       selectedProject.keyLearnings.map((k, i) => (
                         <li key={i}>{k}</li>
