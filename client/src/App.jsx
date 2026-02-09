@@ -123,6 +123,7 @@ function App() {
               <main className="main-content">
                 <Navbar />
                 <Hero />
+                <About/>
                 <Projects />
                 <Skills />
                 <Contact />

@@ -17,7 +17,6 @@ const Projects = () => {
   const PROJECTS_PER_LOAD = 3;
   const API_BASE_URL = import.meta.env.VITE_API_URL;
 
-
   const [visibleCount, setVisibleCount] = useState(PROJECTS_PER_LOAD);
   const [selectedProject, setSelectedProject] = useState(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
