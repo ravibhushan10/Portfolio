@@ -4,7 +4,7 @@ const path = require('path');
 require('dotenv').config();
 const connectDB = require('./config/db');
 const contactRoutes = require('./routes/contact');
-const projectRoutes = require('./routes/project');
+
 
 const app = express();
 
@@ -38,7 +38,7 @@ app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
 app.use('/api/contact', contactRoutes);
-app.use('/api/projects', projectRoutes);
+
 
 const distPath = path.join(__dirname, '../server/dist');
 app.use(express.static(distPath));
