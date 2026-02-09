@@ -7,7 +7,6 @@ import Projects from "./components/projects/projects";
 import Contact from "./components/contact/contact";
 import Footer from "./components/footer/footer";
 import Navbar from "./components/navbar/navbar";
-import AdminDashboard from "./components/admin/admin";
 import "./App.css";
 
 function App() {
@@ -112,10 +111,6 @@ function App() {
   return (
     <Router>
       <Routes>
-        {/* Admin Dashboard Route */}
-        <Route path="/admin" element={<AdminDashboard />} />
-
-        {/* Main Portfolio Route */}
         <Route
           path="/"
           element={

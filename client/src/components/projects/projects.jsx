@@ -12,10 +12,10 @@ import {
   Link,
 } from "lucide-react";
 import "./projects.css";
+import { projectsData} from '../../../data/Realdata/projectData';
 
 const Projects = () => {
   const PROJECTS_PER_LOAD = 3;
-  const API_BASE_URL = import.meta.env.VITE_API_URL;
 
   const [visibleCount, setVisibleCount] = useState(PROJECTS_PER_LOAD);
   const [selectedProject, setSelectedProject] = useState(null);
@@ -23,61 +23,31 @@ const Projects = () => {
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [loadingFullProject, setLoadingFullProject] = useState(false);
 
   useEffect(() => {
-    const fetchProjects = async () => {
-      try {
-        setLoading(true);
-        setError(null);
-        console.time('Projects Fetch Time');
-        const response = await fetch(`${API_BASE_URL}/projects`);
-        console.timeEnd('Projects end Time');
-
-        if (!response.ok) {
-          throw new Error(`Failed to fetch projects: ${response.status}`);
-        }
-
-        const data = await response.json();
-        setProjects(data);
-      } catch (err) {
-        setError(err.message);
-        setProjects([]);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchProjects();
-  }, []);
-
-  const handleViewDetails = async (project) => {
-    if (project.fullDescription && project.images) {
-      setSelectedProject(project);
-      setCurrentImageIndex(0);
-      return;
-    }
+  const loadProjects = () => {
     try {
-      setLoadingFullProject(true);
-      const response = await fetch(`${API_BASE_URL}/projects/${project._id}`);
+      setLoading(true);
+      setError(null);
 
-      if (!response.ok) {
-        throw new Error("Failed to load project details");
-      }
+      setProjects(projectsData);
+      setLoading(false);
 
-      const fullProject = await response.json();
-      setProjects((prev) =>
-        prev.map((p) => (p._id === fullProject._id ? fullProject : p))
-      );
-
-      setSelectedProject(fullProject);
-      setCurrentImageIndex(0);
     } catch (err) {
-      alert("Failed to load project details. Please try again.");
-    } finally {
-      setLoadingFullProject(false);
+      setError(err.message);
+      setProjects([]);
+      setLoading(false);
     }
   };
+
+  loadProjects();
+}, []);
+
+  const handleViewDetails = (project) => {
+    setSelectedProject(project);
+    setCurrentImageIndex(0);
+  };
+
   if (loading) {
     return (
       <section className="featured-section" id="projects">
@@ -110,7 +80,7 @@ const Projects = () => {
           <div className="error-container">
             <div className="error-box">
               <div className="error-header">
-                <p className="error-text">Error: Failed to fetch projects.</p>
+                <p className="error-text">Error: Failed to load projects.</p>
                 <button
                   className="error-close-btn"
                   onClick={() => setError(null)}
@@ -145,10 +115,6 @@ const Projects = () => {
                     alt={project.title}
                     loading="lazy"
                     decoding="async"
-                    onError={(e) => {
-                      e.target.src =
-                        "https://via.placeholder.com/400x300?text=Image+Not+Found";
-                    }}
                   />
 
                   <div className="featured-image-overlay">
@@ -164,13 +130,8 @@ const Projects = () => {
                       className="featured-icon-btn"
                       title="View Details"
                       onClick={() => handleViewDetails(project)}
-                      disabled={loadingFullProject}
                     >
-                      {loadingFullProject ? (
-                        <Loader size={20} className="spinning" />
-                      ) : (
-                        <Eye size={20} />
-                      )}
+                      <Eye size={20} />
                     </button>
 
                     <button
@@ -198,14 +159,14 @@ const Projects = () => {
                   <button
                     onClick={() => handleViewDetails(project)}
                     className="featured-view-btn"
-                    disabled={loadingFullProject}
                   >
-                    {loadingFullProject ? "Loading..." : "View Details"}
+                    View Details
                   </button>
                 </div>
               </div>
             ))}
           </div>
+
           {visibleCount < projects.length && (
             <div className="featured-cta">
               <button
@@ -218,11 +179,13 @@ const Projects = () => {
               </button>
             </div>
           )}
+
           {visibleCount >= projects.length && projects.length > 0 && (
             <div className="projects-end-text">End of projects</div>
           )}
         </div>
       </section>
+
       {selectedProject && (
         <div
           className="project-modal-overlay"
@@ -241,10 +204,6 @@ const Projects = () => {
                   alt="project"
                   loading="lazy"
                   decoding="async"
-                  onError={(e) => {
-                    e.target.src =
-                      "https://via.placeholder.com/600x400?text=Image+Not+Found";
-                  }}
                 />
 
                 {selectedProject.images &&
@@ -276,6 +235,7 @@ const Projects = () => {
                     </>
                   )}
               </div>
+
               <div className="description">
                 <h4
                   style={{
@@ -289,6 +249,7 @@ const Projects = () => {
                 </h4>
                 <p>{selectedProject.fullDescription}</p>
               </div>
+
               <div className="project-details-grid">
                 <section>
                   <h4
@@ -375,14 +336,14 @@ const Projects = () => {
                     >
                       <ExternalLink size={20} className="logo" /> Live Demo
                     </a>
-                    <a
+                      <a
                       href={selectedProject.github}
                       target="_blank"
                       rel="noreferrer"
                     >
                       <Github size={20} className="logo" /> GitHub Repository
                     </a>
-                    <a
+                       <a
                       href={selectedProject.documentation}
                       target="_blank"
                       rel="noreferrer"

@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { GoogleGenAI } from "@google/genai";
-import { generateSystemInstruction ,portfolioData,conversationRules} from '../../../data/aiData';
+import { generateSystemInstruction ,portfolioData,conversationRules} from '../../../data/Realdata/aiData';
+
 import './about.css'
 
 const About = () => {
