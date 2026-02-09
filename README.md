@@ -6,54 +6,42 @@ A modern, full-stack personal portfolio website with admin dashboard for dynamic
 <table align="center">
   <tr>
     <td align="center">
-      <img src="screenshots/front.png" ><br/>
+      <img src="client/data/screenshots/portfolio/front.png" ><br/>
       <em>Home Page</em>
     </td>
     <td align="center">
-      <img src="screenshots/first.png" ><br/>
-      <em>Projects section</em>
+      <img src="client/data/screenshots/portfolio/second.png" ><br/>
+      <em>AI Chatbot</em>
     </td>
   </tr>
   <tr>
     <td align="center">
-      <img src="screenshots/second.png" ><br/>
-      <em>View details section</em>
+      <img src="client/data/screenshots/portfolio/third.png" ><br/>
+      <em>Project section</em>
     </td>
     <td align="center">
-      <img src="screenshots/third.png"><br/>
+      <img src="client/data/screenshots/portfolio/fourth.png"><br/>
       <em>View details section</em>
     </td>
   </tr>
   <tr>
     <td align="center">
-      <img src="screenshots/fourth.png" ><br/>
+      <img src="client/data/screenshots/portfolio/fifth.png" ><br/>
       <em>Skills section</em>
     </td>
      <td align="center">
-      <img src="screenshots/fifth.png" ><br/>
+      <img src="client/data/screenshots/portfolio/sixth.png" ><br/>
       <em>Contact section</em>
     </td>
   </tr>
    <tr>
     <td align="center">
-      <img src="screenshots/fifth(2).png" ><br/>
-      <em>Admin login</em>
+      <img src="client/data/screenshots/portfolio/seventh.png" ><br/>
+      <em>Contact sucess</em>
     </td>
-     <td align="center">
-      <img src="screenshots/sixth.png" ><br/>
-      <em>Admin dashboard</em>
-    </td>
+     
   </tr>
-   <tr>
-    <td align="center">
-      <img src="screenshots/seventh.png" ><br/>
-      <em>Admin dashboard</em>
-    </td>
-     <td align="center">
-      <img src="screenshots/eight.png" ><br/>
-      <em>Admin dashboard</em>
-    </td>
-  </tr>
+   
 </table>
 
 
@@ -303,3 +291,4 @@ A modern, full-stack personal portfolio website with admin dashboard for dynamic
 </div>
 
 ---
+
