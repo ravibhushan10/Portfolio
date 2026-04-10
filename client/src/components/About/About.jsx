@@ -177,8 +177,8 @@ export default function About() {
           <div className="about-stats">
             {STATS.map(({ num, label }) => (
               <div key={label} className="about-stat">
-                <div className="about-stat-num">{num}</div>
-                <div className="about-stat-label">{label}</div>
+                <div className="about-stat-num">{num}   <span className="about-stat-label">{label}</span></div>
+
               </div>
             ))}
           </div>
