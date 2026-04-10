@@ -9,6 +9,7 @@ const NAV_LINKS = [
   { id: 'contact',  label: 'Contact'  },
 ]
 
+
 export default function Navbar() {
   const [active,   setActive]   = useState('home')
   const [scrolled, setScrolled] = useState(false)
