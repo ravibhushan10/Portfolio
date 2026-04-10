@@ -1,364 +1,170 @@
-import React, { useState, useEffect } from "react";
-import {
-  Github,
-  ExternalLink,
-  Eye,
-  Loader,
-  Rocket,
-  Lightbulb,
-  Code,
-  CheckCircle,
-  BookOpen,
-  Link,
-} from "lucide-react";
-import "./projects.css";
-import { projectsData} from '../../../data/Realdata/projectData';
+import { useEffect, useState } from 'react'
+import { Github, ExternalLink, X, ChevronLeft, ChevronRight } from 'lucide-react'
+import { projectsData } from '../../../data/Realdata/projectData'
 
-const Projects = () => {
-  const PROJECTS_PER_LOAD = 3;
+const PER_PAGE = 3
 
-  const [visibleCount, setVisibleCount] = useState(PROJECTS_PER_LOAD);
-  const [selectedProject, setSelectedProject] = useState(null);
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const [projects, setProjects] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+export default function Projects() {
+  const [projects,  setProjects]  = useState([])
+  const [visible,   setVisible]   = useState(PER_PAGE)
+  const [selected,  setSelected]  = useState(null)
+  const [imgIdx,    setImgIdx]    = useState(0)
 
+  useEffect(() => { setProjects(projectsData || []) }, [])
+
+  // Lock scroll + keyboard close for modal
   useEffect(() => {
-  const loadProjects = () => {
-    try {
-      setLoading(true);
-      setError(null);
+    if (!selected) { document.body.style.overflow = ''; return }
+    document.body.style.overflow = 'hidden'
+    const onKey = e => { if (e.key === 'Escape') close() }
+    window.addEventListener('keydown', onKey)
+    return () => { window.removeEventListener('keydown', onKey); document.body.style.overflow = '' }
+  }, [selected])
 
-      setProjects(projectsData);
-      setLoading(false);
-
-    } catch (err) {
-      setError(err.message);
-      setProjects([]);
-      setLoading(false);
-    }
-  };
-
-  loadProjects();
-}, []);
-
-  const handleViewDetails = (project) => {
-    setSelectedProject(project);
-    setCurrentImageIndex(0);
-  };
-
-  if (loading) {
-    return (
-      <section className="featured-section" id="projects">
-        <div className="featured-container">
-          <div className="featured-header">
-            <h2 className="featured-title">My Projects</h2>
-            <p className="featured-subtitle">
-              Explore my latest work and creative solutions
-            </p>
-          </div>
-          <div className="loading-container">
-            <Loader size={50} className="loading-spinner" />
-            <p className="loading-text">Loading projects...</p>
-          </div>
-        </div>
-      </section>
-    );
-  }
-
-  if (error) {
-    return (
-      <section className="featured-section" id="projects">
-        <div className="featured-container">
-          <div className="featured-header">
-            <h2 className="featured-title">My Projects</h2>
-            <p className="featured-subtitle">
-              Explore my latest work and creative solutions
-            </p>
-          </div>
-          <div className="error-container">
-            <div className="error-box">
-              <div className="error-header">
-                <p className="error-text">Error: Failed to load projects.</p>
-                <button
-                  className="error-close-btn"
-                  onClick={() => setError(null)}
-                >
-                  ✕
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-    );
-  }
+  const open  = p => { setSelected(p); setImgIdx(0) }
+  const close = ()  => setSelected(null)
+  const prev  = ()  => setImgIdx(i => (i - 1 + selected.images.length) % selected.images.length)
+  const next  = ()  => setImgIdx(i => (i + 1) % selected.images.length)
 
   return (
     <>
-      <section className="featured-section" id="projects">
-        <div className="featured-container">
-          <div className="featured-header">
-            <h2 className="featured-title">My Projects</h2>
-            <p className="featured-subtitle">
-              Explore my latest work and creative solutions
-            </p>
-          </div>
+      <section id="projects" className="projects-section">
+        <div className="section-wrap">
+        
+          <h2 className="section-title">Selected Work</h2>
+          <p className="section-sub">
+            Things I've built — from full-stack apps to developer tools and AI integrations.
+          </p>
 
-          <div className="featured-grid">
-            {projects.slice(0, visibleCount).map((project) => (
-              <div key={project._id} className="featured-card">
-                <div className="featured-image">
-                  <img
-                    src={project.img}
-                    alt={project.title}
-                    loading="lazy"
-                    decoding="async"
-                  />
-
-                  <div className="featured-image-overlay">
-                    <button
-                      className="featured-icon-btn"
-                      title="Github Link"
-                      onClick={() => window.open(project.github, "_blank")}
-                    >
-                      <Github size={20} />
-                    </button>
-
-                    <button
-                      className="featured-icon-btn"
-                      title="View Details"
-                      onClick={() => handleViewDetails(project)}
-                    >
-                      <Eye size={20} />
-                    </button>
-
-                    <button
-                      className="featured-icon-btn"
-                      title="Live Demo"
-                      onClick={() => window.open(project.live, "_blank")}
-                    >
-                      <ExternalLink size={20} />
-                    </button>
-                  </div>
+          <div className="projects-grid">
+            {projects.slice(0, visible).map((p, i) => (
+              <div key={p._id} className="project-card" onClick={() => open(p)}>
+                <div className="project-img-wrap">
+                  <img className="project-img" src={p.img} alt={p.title} loading="lazy" />
+                  <div className="project-img-fade" />
                 </div>
 
-                <div className="featured-content">
-                  <h3 className="featured-card-title">{project.title}</h3>
-                  <p className="featured-card-desc">{project.description}</p>
+                <div className="project-body">
+                  <div className="project-num">0{i + 1}</div>
+                  <h3 className="project-title">{p.title}</h3>
+                  <p className="project-desc">{p.description}</p>
 
-                  <div className="featured-tags">
-                    {project.tags &&
-                      project.tags.map((tag, i) => (
-                        <span key={i} className="featured-tag">
-                          {tag}
-                        </span>
-                      ))}
+                  <div className="project-tags">
+                    {(p.tags || []).slice(0, 4).map(t => (
+                      <span key={t} className="project-tag">{t}</span>
+                    ))}
+                    {(p.tags || []).length > 4 && (
+                      <span className="project-tag">+{p.tags.length - 4}</span>
+                    )}
                   </div>
-                  <button
-                    onClick={() => handleViewDetails(project)}
-                    className="featured-view-btn"
-                  >
-                    View Details
-                  </button>
+
+                  <div className="project-footer">
+                    {p.github && (
+                      <a href={p.github} target="_blank" rel="noopener noreferrer"
+                        className="project-link" onClick={e => e.stopPropagation()}>
+                        <Github size={12} /> Code
+                      </a>
+                    )}
+                    {p.live && (
+                      <a href={p.live} target="_blank" rel="noopener noreferrer"
+                        className="project-link" onClick={e => e.stopPropagation()}>
+                        <ExternalLink size={12} /> Live
+                      </a>
+                    )}
+                    <span className="project-link cta">Details →</span>
+                  </div>
                 </div>
               </div>
             ))}
           </div>
 
-          {visibleCount < projects.length && (
-            <div className="featured-cta">
-              <button
-                className="featured-btn"
-                onClick={() =>
-                  setVisibleCount((prev) => prev + PROJECTS_PER_LOAD)
-                }
-              >
+          {visible < projects.length && (
+            <div className="projects-load-more">
+              <button className="btn btn-outline" onClick={() => setVisible(v => v + PER_PAGE)}>
                 Load more projects
               </button>
             </div>
           )}
-
-          {visibleCount >= projects.length && projects.length > 0 && (
-            <div className="projects-end-text">End of projects</div>
-          )}
         </div>
       </section>
 
-      {selectedProject && (
-        <div
-          className="project-modal-overlay"
-          onClick={() => setSelectedProject(null)}
-        >
-          <div className="project-modal" onClick={(e) => e.stopPropagation()}>
-            <div className="project-modal-header">
-              <h3>{selectedProject.title}</h3>
-              <button onClick={() => setSelectedProject(null)}>✕</button>
-            </div>
+      {/* ── Modal ── */}
+      {selected && (
+        <div className="modal-backdrop" onClick={close}>
+          <div className="modal-box" onClick={e => e.stopPropagation()}>
+            <button className="modal-close" onClick={close} aria-label="Close">
+              <X size={15} />
+            </button>
 
-            <div className="modal-scrollable">
-              <div className="project-slider">
+            {/* Carousel */}
+            {selected.images?.length > 0 && (
+              <div className="modal-carousel">
                 <img
-                  src={selectedProject.images?.[currentImageIndex]}
-                  alt="project"
-                  loading="lazy"
-                  decoding="async"
+                  className="modal-carousel-img"
+                  src={selected.images[imgIdx]}
+                  alt={`${selected.title} screenshot ${imgIdx + 1}`}
                 />
-
-                {selectedProject.images &&
-                  selectedProject.images.length > 1 && (
-                    <>
-                      <button
-                        className="slider-btn left"
-                        onClick={() =>
-                          setCurrentImageIndex((prev) =>
-                            prev === 0
-                              ? selectedProject.images.length - 1
-                              : prev - 1
-                          )
-                        }
-                      >
-                        ‹
-                      </button>
-
-                      <button
-                        className="slider-btn right"
-                        onClick={() =>
-                          setCurrentImageIndex(
-                            (prev) => (prev + 1) % selectedProject.images.length
-                          )
-                        }
-                      >
-                        ›
-                      </button>
-                    </>
-                  )}
+                {selected.images.length > 1 && (
+                  <>
+                    <button className="modal-carousel-btn prev" onClick={prev} aria-label="Previous">
+                      <ChevronLeft size={15} />
+                    </button>
+                    <button className="modal-carousel-btn next" onClick={next} aria-label="Next">
+                      <ChevronRight size={15} />
+                    </button>
+                    <div className="modal-dots">
+                      {selected.images.map((_, idx) => (
+                        <span key={idx}
+                          className={`modal-dot${idx === imgIdx ? ' active' : ''}`}
+                          onClick={() => setImgIdx(idx)}
+                        />
+                      ))}
+                    </div>
+                  </>
+                )}
               </div>
+            )}
 
-              <div className="description">
-                <h4
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "0.5rem",
-                  }}
-                >
-                  <BookOpen size={18} className="dis-logo" />
-                  Description
-                </h4>
-                <p>{selectedProject.fullDescription}</p>
-              </div>
+            <div className="modal-content">
+              <h2 className="modal-title">{selected.title}</h2>
+              <p className="modal-desc">{selected.fullDescription || selected.description}</p>
 
-              <div className="project-details-grid">
-                <section>
-                  <h4
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "0.5rem",
-                    }}
-                  >
-                    <CheckCircle size={18} className="cir-logo" /> Features
-                  </h4>
-                  <ul style={{ "--bullet-color": "rgb(17, 205, 17)" }}>
-                    {selectedProject.features &&
-                      selectedProject.features.map((f, i) => (
-                        <li key={i}>{f}</li>
-                      ))}
-                  </ul>
-                </section>
-
-                <section>
-                  <h4
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "0.5rem",
-                    }}
-                  >
-                    <Code size={18} className="cod-logo" /> Tech Stack
-                  </h4>
-                  <ul style={{ "--bullet-color": "#006eff" }}>
-                    {selectedProject.techStack &&
-                      selectedProject.techStack.map((t, i) => (
-                        <li key={i}>{t}</li>
-                      ))}
-                  </ul>
-                </section>
-
-                <section>
-                  <h4
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "0.5rem",
-                    }}
-                  >
-                    <Lightbulb size={18} className="bra-logo" /> Key Learnings
-                  </h4>
-                  <ul style={{ "--bullet-color": "#000000" }}>
-                    {selectedProject.keyLearnings &&
-                      selectedProject.keyLearnings.map((k, i) => (
-                        <li key={i}>{k}</li>
-                      ))}
-                  </ul>
-                </section>
-
-                <section>
-                  <h4
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "0.5rem",
-                    }}
-                  >
-                    <Rocket size={18} className="roc-logo" /> Future
-                    Improvements
-                  </h4>
-                  <ul style={{ "--bullet-color": "#9b3ffe" }}>
-                    {selectedProject.futureImprovements &&
-                      selectedProject.futureImprovements.map((f, i) => (
-                        <li key={i}>{f}</li>
-                      ))}
-                  </ul>
-                </section>
-
-                <section className="project-links">
-                  <h4>
-                    <Link size={18} className="plink" /> Project Links
-                  </h4>
-                  <div className="project-links1">
-                    <a
-                      href={selectedProject.live}
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      <ExternalLink size={20} className="logo" /> Live Demo
-                    </a>
-                      <a
-                      href={selectedProject.github}
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      <Github size={20} className="logo" /> GitHub Repository
-                    </a>
-                       <a
-                      href={selectedProject.documentation}
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      <BookOpen size={20} className="logo" /> Documentation
-                    </a>
+              {selected.features?.length > 0 && (
+                <>
+                  <div className="modal-section-label">Key Features</div>
+                  <div className="modal-features">
+                    {selected.features.map(f => (
+                      <div key={f} className="modal-feature">{f}</div>
+                    ))}
                   </div>
-                </section>
+                </>
+              )}
+
+              {selected.tags?.length > 0 && (
+                <>
+                  <div className="modal-section-label">Tech Stack</div>
+                  <div className="project-tags" style={{ marginBottom: 0 }}>
+                    {selected.tags.map(t => <span key={t} className="project-tag">{t}</span>)}
+                  </div>
+                </>
+              )}
+
+              <div className="modal-actions">
+                {selected.github && (
+                  <a href={selected.github} target="_blank" rel="noopener noreferrer" className="btn btn-outline">
+                    <Github size={14} /> View Code
+                  </a>
+                )}
+                {selected.live && (
+                  <a href={selected.live} target="_blank" rel="noopener noreferrer" className="btn btn-primary">
+                    <ExternalLink size={14} /> Live Demo
+                  </a>
+                )}
               </div>
             </div>
           </div>
         </div>
       )}
     </>
-  );
-};
-
-export default Projects;
+  )
+}

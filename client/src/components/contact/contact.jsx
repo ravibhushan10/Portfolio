@@ -1,354 +1,226 @@
-import { useState } from "react";
-import {
-  FaPaperPlane,
-  FaEnvelope,
-  FaPhone,
-  FaMapMarkerAlt,
-  FaUser,
-  FaTag,
-  FaCheckCircle,
-  FaExclamationCircle,
-  FaTimes,
-} from "react-icons/fa";
-import "./contact.css";
+import { useState } from 'react'
+import { FaEnvelope, FaPhone, FaMapMarkerAlt, FaUser, FaTag, FaPaperPlane, FaHeart } from 'react-icons/fa'
+import { FaGithub, FaLinkedin, FaInstagram} from 'react-icons/fa'
+import { FaXTwitter } from "react-icons/fa6";
+const INFO_CARDS = [
+  {
+    href: 'mailto:ravibhushankumar87tp@gmail.com',
+    icon: <FaEnvelope />,
+    title: 'Email',
+    val: 'ravibhushankumar87tp@gmail.com',
+    note: 'Replies within 24 hours',
+  },
+  {
+    href: 'tel:+919199519751',
+    icon: <FaPhone />,
+    title: 'Phone',
+    val: '+91 9199519751',
+    note: 'Mon–Fri, 9 am–6 pm IST',
+  },
+  {
+    href: 'https://www.google.com/maps/place/Langat+Singh+College/@25.6260068,84.1450358,6.72z/data=!4m6!3m5!1s0x39ed10e119cd7b81:0x4a58910aefe6de60!8m2!3d26.1165576!4d85.3785924!16s%2Fm%2F0tkj619?entry=ttu&g_ep=EgoyMDI2MDQwNy4wIKXMDSoASAFQAw%3D%3D',
+    icon: <FaMapMarkerAlt />,
+    title: 'Location',
+    val: 'Muzaffarpur, Bihar, India',
+    note: 'Available for remote worldwide',
+    ext: true,
+  },
+]
 
-const Contact = () => {
-  const [formData, setFormData] = useState({
-    fullName: "",
-    email: "",
-    phone: "",
-    subject: "",
-    message: "",
-  });
+const AVAIL = [
+  { label: 'Full-time',    c: 'amber' },
+  { label: 'Freelance',    c: 'green' },
+  { label: 'Internship',   c: 'amber' },
+  { label: 'Remote',       c: 'green' },
+  { label: 'Open Source',  c: 'amber' },
+]
 
-  const [loading, setLoading] = useState(false);
-  const [showStatus, setShowStatus] = useState(false);
-  const [status, setStatus] = useState({ type: "", message: "" });
+const FOOTER_SOCIALS = [
+  { href: 'https://github.com/ravibhushan10',                         icon: <FaGithub />,    label: 'GitHub'    },
+  { href: 'https://www.linkedin.com/in/ravibhushan-kumar/',           icon: <FaLinkedin />,  label: 'LinkedIn'  },
+  { href: 'https://x.com/Ravibhushan_12',                             icon: <FaXTwitter />,   label: 'X'         },
+  { href: 'https://www.instagram.com/ravi_maurya.2/',                 icon: <FaInstagram />, label: 'Instagram' },
+]
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
+const EMPTY_FORM = { fullName: '', email: '', phone: '', subject: '', message: '' }
 
-  const showStatusMessage = (type, message) => {
-    setStatus({ type, message });
-    setShowStatus(true);
+export default function Contact() {
+  const [form,    setForm]    = useState(EMPTY_FORM)
+  const [loading, setLoading] = useState(false)
+  const [toast,   setToast]   = useState(null)
 
-    const timeout = type === "success" ? 5000 : 7000;
-    setTimeout(() => {
-      setShowStatus(false);
-    }, timeout);
-  };
+  const showToast = (type, msg) => {
+    setToast({ type, msg })
+    setTimeout(() => setToast(null), 5000)
+  }
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
+  const onChange = e => setForm({ ...form, [e.target.name]: e.target.value })
 
-    if (
-      !formData.fullName ||
-      !formData.email ||
-      !formData.subject ||
-      !formData.message
-    ) {
-      showStatusMessage("error", "Please fill all required fields");
-      setLoading(false);
-      return;
-    }
+  const onSubmit = async e => {
+    e.preventDefault()
+    const { fullName, email, subject, message } = form
+    if (!fullName || !email || !subject || !message)
+      return showToast('error', 'Please fill in all required fields.')
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
+      return showToast('error', 'Please enter a valid email address.')
 
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(formData.email)) {
-      showStatusMessage("error", "Please enter a valid email address");
-      setLoading(false);
-      return;
-    }
-
+    setLoading(true)
     try {
-      const API_URL = import.meta.env.VITE_API_URL;
-      console.log(import.meta);
-      const res = await fetch(`${API_URL}/contact`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
-
-      const data = await res.json();
-
-      if (!res.ok) {
-        if (data.errors) {
-          const firstError = Object.values(data.errors)[0];
-          throw new Error(firstError);
-        }
-        throw new Error(data.message || `Submission failed`);
-      }
-
-      showStatusMessage(
-        "success",
-        "Message sent successfully! I'll get back to you soon."
-      );
-
-      setFormData({
-        fullName: "",
-        email: "",
-        phone: "",
-        subject: "",
-        message: "",
-      });
+      const API = import.meta.env.VITE_API_URL
+      const res = await fetch(`${API}/contact`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(form),
+      })
+      const data = await res.json()
+      if (!res.ok) throw new Error(data.message || 'Submission failed')
+      showToast('success', "Message sent! I'll get back to you soon 🎉")
+      setForm(EMPTY_FORM)
     } catch (err) {
-      console.error("Error details:", err);
-
-      let errorMessage = err.message;
-
-      if (err.message.includes("Failed to fetch")) {
-        errorMessage = "Cannot connect to server.";
-      } else if (err.message.includes("NetworkError")) {
-        errorMessage = "Network error. Please check your internet connection.";
-      }
-
-      showStatusMessage("error", errorMessage);
+      const msg = err.message?.includes('fetch')
+        ? 'Cannot connect to server. Try again later.'
+        : err.message
+      showToast('error', msg)
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
-
-  const closeStatusModal = () => {
-    setShowStatus(false);
-  };
+  }
 
   return (
     <>
-      {showStatus && (
-        <div className="status-overlay" onClick={closeStatusModal}>
-          <div
-            className={`status-modal ${status.type}`}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <button className="status-close-btn" onClick={closeStatusModal}>
-              <FaTimes />
-            </button>
+      <section id="contact" className="contact-section">
+        <div className="section-wrap">
 
-            <div className="status-icon">
-              {status.type === "success" ? (
-                <FaCheckCircle />
-              ) : (
-                <FaExclamationCircle />
-              )}
+          {/* Big editorial heading */}
+          <div className="contact-hero-text">
+            <h2 className="contact-big-title">
+              Let's build<br />
+              <em>something.</em>
+            </h2>
+            <p className="contact-tagline">
+              Have a project in mind? I'd love to hear about it.
+            </p>
+          </div>
+
+          <div className="contact-grid">
+
+            {/* ── Left: info ── */}
+            <div>
+              <div className="contact-info-list">
+                {INFO_CARDS.map(({ href, icon, title, val, note, ext }) => (
+                  <a key={title} href={href} className="contact-info-card"
+                    {...(ext ? { target: '_blank', rel: 'noopener noreferrer' } : {})}>
+                    <div className="contact-info-icon">{icon}</div>
+                    <div>
+                      <div className="contact-info-title">{title}</div>
+                      <div className="contact-info-val">{val}</div>
+                      <div className="contact-info-note">{note}</div>
+                    </div>
+                  </a>
+                ))}
+
+              </div>
             </div>
 
-            <h3 className="status-title">
-              {status.type === "success" ? "Success!" : "Error!"}
-            </h3>
+            {/* ── Right: form ── */}
+            <div className="contact-form-wrap">
+              <div className="contact-form-title">Send a message</div>
 
-            <p className="status-message">{status.message}</p>
+              <form onSubmit={onSubmit}>
+                <div className="form-row">
+                  <div className="form-group">
+                    <label className="form-label">
+                      Full Name <span className="form-required">*</span>
+                    </label>
+                    <div className="form-input-wrap">
+                      <FaUser className="form-icon" />
+                      <input className="form-input" type="text" name="fullName"
+                        placeholder="Your full name" value={form.fullName}
+                        onChange={onChange} disabled={loading} required />
+                    </div>
+                  </div>
+                  <div className="form-group">
+                    <label className="form-label">
+                      Email <span className="form-required">*</span>
+                    </label>
+                    <div className="form-input-wrap">
+                      <FaEnvelope className="form-icon" />
+                      <input className="form-input" type="email" name="email"
+                        placeholder="you@example.com" value={form.email}
+                        onChange={onChange} disabled={loading} required />
+                    </div>
+                  </div>
+                </div>
 
-            <div className="status-actions">
-              <button
-                className="status-ok-btn"
-                onClick={closeStatusModal}
-                autoFocus
-              >
-                OK
-              </button>
+                <div className="form-row">
+                  <div className="form-group">
+                    <label className="form-label">Phone</label>
+                    <div className="form-input-wrap">
+                      <FaPhone className="form-icon" />
+                      <input className="form-input" type="tel" name="phone"
+                        placeholder="Optional" value={form.phone}
+                        onChange={onChange} disabled={loading} />
+                    </div>
+                  </div>
+                  <div className="form-group">
+                    <label className="form-label">
+                      Subject <span className="form-required">*</span>
+                    </label>
+                    <div className="form-input-wrap">
+                      <FaTag className="form-icon" />
+                      <input className="form-input" type="text" name="subject"
+                        placeholder="What's this about?" value={form.subject}
+                        onChange={onChange} disabled={loading} required />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="form-group full" style={{ marginBottom: 0 }}>
+                  <label className="form-label">
+                    Message <span className="form-required">*</span>
+                  </label>
+                  <textarea className="form-textarea" name="message" rows={5}
+                    placeholder="Tell me about your project or idea..."
+                    value={form.message} onChange={onChange}
+                    disabled={loading} required />
+                </div>
+
+                <button type="submit" className="form-submit" disabled={loading}>
+                  {loading
+                    ? <><span className="form-spinner" /> Sending...</>
+                    : <><FaPaperPlane size={13} /> Send Message</>
+                  }
+                </button>
+              </form>
             </div>
           </div>
         </div>
-      )}
 
-      <section className="contact section-bg" id="contact">
-        <div className="section-content">
-          <div className="contact__container">
-            <div className="contact__header">
-              <h2 className="contact__title">Get In Touch</h2>
-              <p className="contact__intro">
-                Have questions about my work or want to discuss a project? I’m
-                always open to meaningful collaboration.
-              </p>
-            </div>
-
-            <div className="contact__wrapper">
-              <div className="contact__info">
-                <a
-                  href="mailto:ravibhushankumar87tp@gmail.com"
-                  className="contact__info-card"
-                >
-                  <div className="contact__info-icon">
-                    <FaEnvelope />
-                  </div>
-                  <div className="contact__info-content">
-                    <h3 className="contact__info-title">Email</h3>
-                    <p className="contact__info-text">
-                      ravibhushankumar87tp@gmail.com
-                    </p>
-                    <p className="contact__info-subtext">
-                      Typically replies within 24 hours
-                    </p>
-                  </div>
-                </a>
-
-                <a href="tel:+919199519751" className="contact__info-card">
-                  <div className="contact__info-icon">
-                    <FaPhone />
-                  </div>
-                  <div className="contact__info-content">
-                    <h3 className="contact__info-title">Phone</h3>
-                    <p className="contact__info-text">+91 9199519751</p>
-                    <p className="contact__info-subtext">
-                      Mon-Fri from 9am to 6pm
-                    </p>
-                  </div>
-                </a>
-
-                <a
-                  href="https://www.google.com/maps/search/?api=1&query=Bihar,Muzaffarpur,Muzaffarpur Park+India"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="contact__info-card"
-                >
-                  <div className="contact__info-icon">
-                    <FaMapMarkerAlt />
-                  </div>
-                  <div className="contact__info-content">
-                    <h3 className="contact__info-title">Location</h3>
-                    <p className="contact__info-text">
-                      Muzaffarpur, Bihar, India
-                    </p>
-                    <p className="contact__info-subtext">
-                      Available for remote work worldwide
-                    </p>
-                  </div>
-                </a>
-              </div>
-
-              <div className="contact__form-section">
-                <form className="contact__form" onSubmit={handleSubmit}>
-                  <div className="form__row">
-                    <div className="form__group">
-                      <label htmlFor="fullName" className="form__label">
-                        Full Name <span className="required">*</span>
-                      </label>
-                      <div className="input-box">
-                        <FaUser className="input-icon" />
-                        <input
-                          type="text"
-                          id="fullName"
-                          name="fullName"
-                          placeholder="Enter your full name"
-                          value={formData.fullName}
-                          onChange={handleChange}
-                          required
-                          disabled={loading}
-                          className="form__input"
-                        />
-                      </div>
-                    </div>
-
-                    <div className="form__group">
-                      <label htmlFor="email" className="form__label">
-                        Email Address <span className="required">*</span>
-                      </label>
-                      <div className="input-box">
-                        <FaEnvelope className="input-icon" />
-                        <input
-                          type="email"
-                          id="email"
-                          name="email"
-                          placeholder="Enter your email"
-                          value={formData.email}
-                          onChange={handleChange}
-                          required
-                          disabled={loading}
-                          className="form__input"
-                        />
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="form__row">
-                    <div className="form__group">
-                      <label htmlFor="phone" className="form__label">
-                        Phone Number
-                      </label>
-                      <div className="input-box">
-                        <FaPhone className="input-icon" />
-                        <input
-                          type="tel"
-                          id="phone"
-                          name="phone"
-                          placeholder="Enter phone number (optional)"
-                          value={formData.phone}
-                          onChange={handleChange}
-                          disabled={loading}
-                          className="form__input"
-                        />
-                      </div>
-                    </div>
-
-                    <div className="form__group">
-                      <label htmlFor="subject" className="form__label">
-                        Subject <span className="required">*</span>
-                      </label>
-                      <div className="input-box">
-                        <FaTag className="input-icon" />
-                        <input
-                          type="text"
-                          id="subject"
-                          name="subject"
-                          placeholder="What's this about?"
-                          value={formData.subject}
-                          onChange={handleChange}
-                          required
-                          disabled={loading}
-                          className="form__input"
-                        />
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="form__group full-width">
-                    <label htmlFor="message" className="form__label">
-                      Message <span className="required">*</span>
-                    </label>
-                    <textarea
-                      id="message"
-                      name="message"
-                      placeholder="Tell us more about your inquiry..."
-                      rows="6"
-                      value={formData.message}
-                      onChange={handleChange}
-                      required
-                      disabled={loading}
-                      className="form__textarea"
-                    ></textarea>
-                  </div>
-
-                  <div className="form__submit">
-                    <button
-                      type="submit"
-                      className="contact__submit-btn"
-                      disabled={loading}
-                    >
-                      {loading ? (
-                        <>
-                          <span>Sending...</span>
-                          <div className="contact__spinner"></div>
-                        </>
-                      ) : (
-                        <>
-                          <span>Send Message</span>
-                          <FaPaperPlane className="contact__submit-icon" />
-                        </>
-                      )}
-                    </button>
-                  </div>
-                </form>
-              </div>
-            </div>
+        {/* Footer strip */}
+        <div className="footer-strip">
+          <p className="footer-copy">
+            © {new Date().getFullYear()} <span>Ravi Bhushan</span>. All rights reserved.
+          </p>
+          <div style={{ display: 'flex', gap: '.45rem' }}>
+            {FOOTER_SOCIALS.map(({ href, icon, label }) => (
+              <a key={label} href={href} target="_blank" rel="noopener noreferrer"
+                className="hero-social-icon" aria-label={label}
+                style={{ width: 32, height: 32, fontSize: '.8rem' }}>
+                {icon}
+              </a>
+            ))}
           </div>
+          <p className="footer-built">
+            Build By <FaHeart size={9} /> Ravi Bhushan
+          </p>
         </div>
       </section>
-    </>
-  );
-};
 
-export default Contact;
+      {toast && (
+        <div className={`toast-notification toast-${toast.type}`}>
+          {toast.type === 'success' ? '✅' : '⚠️'} {toast.msg}
+        </div>
+      )}
+    </>
+  )
+}

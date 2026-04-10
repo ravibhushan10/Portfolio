@@ -1,159 +1,94 @@
-import { useState, useEffect } from "react";
+import { useEffect, useRef, useState } from 'react'
 import {
-  FaReact,
-  FaNodeJs,
-  FaPython,
-  FaAws,
-  FaDatabase,
-  FaGithub,
-  FaDocker,
-  FaGit,
-  FaLinux,
-} from "react-icons/fa";
-import {
-  SiJavascript,
-  SiTypescript,
-  SiMongodb,
-  SiTailwindcss,
-  SiRedux,
-  SiHtml5,
-  SiCss3,
-  SiMysql,
-  SiExpress,
-  SiVisualstudiocode,
-  SiPostman,
-  SiC,
-  SiPython,
-  SiSqlite,
-  SiCplusplus,
-  SiRedis,
-} from "react-icons/si";
-import "./skills.css";
+  FaReact, FaNodeJs, FaAws, FaGithub, FaGit, FaLinux,
+  FaDatabase, FaCode, FaTerminal, FaServer, FaCss3Alt,
+  FaHtml5, FaDocker,
+} from 'react-icons/fa'
+
+const GROUPS = [
+  {
+    label: 'Languages',
+    skills: [
+      { name: 'C',           icon: <FaCode />      },
+      { name: 'C++',         icon: <FaCode />      },
+      { name: 'JavaScript',  icon: <FaCode />      },
+      { name: 'TypeScript',  icon: <FaCode />      },
+      { name: 'SQL',         icon: <FaDatabase />  },
+    ],
+  },
+  {
+    label: 'Frontend',
+    skills: [
+      { name: 'React',        icon: <FaReact />    },
+      { name: 'Redux',        icon: <FaCode />     },
+      { name: 'Tailwind CSS', icon: <FaCss3Alt />  },
+      { name: 'HTML5',        icon: <FaHtml5 />    },
+      { name: 'CSS3',         icon: <FaCss3Alt />  },
+    ],
+  },
+  {
+    label: 'Backend',
+    skills: [
+      { name: 'Node.js',  icon: <FaNodeJs />   },
+      { name: 'Express',  icon: <FaServer />   },
+      { name: 'MongoDB',  icon: <FaDatabase /> },
+      { name: 'MySQL',    icon: <FaDatabase /> },
+      { name: 'Redis',    icon: <FaServer />   },
+    ],
+  },
+  {
+    label: 'Infrastructure',
+    skills: [
+      { name: 'AWS',     icon: <FaAws />      },
+      { name: 'Git',     icon: <FaGit />      },
+      { name: 'GitHub',  icon: <FaGithub />   },
+      { name: 'Linux',   icon: <FaLinux />    },
+      { name: 'VS Code', icon: <FaTerminal /> },
+      { name: 'Postman', icon: <FaServer />   },
+    ],
+  },
+]
 
 export default function Skills() {
-  const [activeFilter, setActiveFilter] = useState("all");
-  const [isSkillsVisible, setIsSkillsVisible] = useState(false);
+  const [visible, setVisible] = useState(false)
+  const ref = useRef(null)
 
   useEffect(() => {
-    const skillsSection = document.getElementById("skills");
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        setIsSkillsVisible(entry.isIntersecting);
-        if (entry.isIntersecting) {
-          document.querySelectorAll(".navbar-link").forEach((link) => {
-            link.classList.remove("navbar-link-active");
-          });
-          const skillsNavLink = document.querySelector('a[href="#skills"]');
-          if (skillsNavLink) {
-            skillsNavLink.classList.add("navbar-link-active");
-          }
-        }
-      },
-      { threshold: 0.3 }
-    );
-
-    if (skillsSection) {
-      observer.observe(skillsSection);
-    }
-
-    return () => {
-      if (skillsSection) {
-        observer.unobserve(skillsSection);
-      }
-    };
-  }, []);
-
-  const skillsData = {
-    frontend: [
-      { name: "React", icon: <FaReact />, category: "frontend" },
-      { name: "TypeScript", icon: <SiTypescript />, category: "frontend" },
-      { name: "Tailwind CSS", icon: <SiTailwindcss />, category: "frontend" },
-      { name: "Redux", icon: <SiRedux />, category: "frontend" },
-      { name: "CSS3", icon: <SiCss3 />, category: "frontend" },
-      { name: "HTML5", icon: <SiHtml5 />, category: "frontend" },
-    ],
-    backend: [
-      { name: "Node.js", icon: <FaNodeJs />, category: "backend" },
-      { name: "Express", icon: <SiExpress />, category: "backend" },
-      { name: "MongoDB", icon: <SiMongodb />, category: "backend" },
-      { name: "MySQL", icon: <SiMysql />, category: "backend" },
-      { name: "Redis", icon: <SiRedis />, category: "backend" },
-    ],
-    tools: [
-      { name: "AWS", icon: <FaAws />, category: "tools" },
-      // { name: "Docker", icon: <FaDocker />, category: "tools" },
-      { name: "Git", icon: <FaGit />, category: "tools" },
-      { name: "GitHub", icon: <FaGithub />, category: "tools" },
-      { name: "Postman", icon: <SiPostman />, category: "tools" },
-      { name: "Vs Code", icon: <SiVisualstudiocode />, category: "tools" },
-      { name: "Linux(terminal)", icon: <FaLinux />, category: "tools" },
-    ],
-    programming: [
-      { name: "C", icon: <SiC />, category: "programming" },
-      { name: "C++", icon: <SiCplusplus />, category: "programming" },
-      { name: "JavaScript", icon: <SiJavascript />, category: "programming" },
-      // { name: "Python", icon: <SiPython />, category: "programming" },
-      { name: "SQL", icon: <SiSqlite />, category: "programming" },
-    ],
-  };
-
-  const allSkills = [
-    ...skillsData.programming,
-    ...skillsData.frontend,
-    ...skillsData.backend,
-    ...skillsData.tools,
-  ];
-
-  const filters = [
-    { id: "all", label: "All Skills" },
-    { id: "programming", label: "Programming Languages" },
-    { id: "frontend", label: "Frontend" },
-    { id: "backend", label: "Backend" },
-    { id: "tools", label: "Tools & DevOps" },
-  ];
-
-  const displayedSkills =
-    activeFilter === "all"
-      ? allSkills
-      : allSkills.filter((skill) => skill.category === activeFilter);
+    const obs = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) setVisible(true) },
+      { threshold: 0.1 }
+    )
+    if (ref.current) obs.observe(ref.current)
+    return () => obs.disconnect()
+  }, [])
 
   return (
-    <section className="skills-wrapper" id="skills">
-      <div className="skills-container">
-        <div className="skills-header">
-          <h2 className="skills-title">Skills & Technologies</h2>
-          <p className="skills-intro">
-            Core technologies and tools leveraged to build scalable, efficient,
-            and impactful solutions.
-          </p>
-        </div>
-
-        <div className="skills-filters">
-          {filters.map((filter) => (
-            <button
-              key={filter.id}
-              className={`filter-btn ${
-                activeFilter === filter.id ? "active" : ""
-              }`}
-              onClick={() => setActiveFilter(filter.id)}
-            >
-              {filter.label}
-            </button>
-          ))}
-        </div>
+    <section id="skills" className="skills-section" ref={ref}>
+      <div className="section-wrap">
+       
+        <h2 className="section-title">My Toolkit</h2>
+        <p className="section-sub">
+          Technologies I reach for daily — from low-level systems programming to cloud-scale deployments.
+        </p>
 
         <div className="skills-grid">
-          {displayedSkills.map((skill) => (
-            <div key={skill.name} className="skills-card">
-              <div className="skills-icon">{skill.icon}</div>
-              <div className="skills-content">
-                <h3 className="skills-name">{skill.name}</h3>
-              </div>
+          {GROUPS.map((group, gi) => (
+            <div key={group.label}>
+              <div className="skill-group-label">{group.label}</div>
+              {group.skills.map((skill, si) => (
+                <div
+                  key={skill.name}
+                  className={`skill-item${visible ? ' visible' : ''}`}
+                  style={visible ? { transitionDelay: `${gi * 80 + si * 55}ms` } : {}}
+                >
+                  <span className="skill-item-icon">{skill.icon}</span>
+                  {skill.name}
+                </div>
+              ))}
             </div>
           ))}
         </div>
       </div>
     </section>
-  );
+  )
 }

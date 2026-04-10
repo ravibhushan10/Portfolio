@@ -1,201 +1,190 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { GoogleGenAI } from "@google/genai";
-import { generateSystemInstruction ,portfolioData} from '../../../data/Realdata/aiData';
+import { useState, useRef, useEffect } from "react";
+import { generateSystemInstruction } from "../../../data/Realdata/aiData";
 
-import './about.css'
+const GROQ_API_URL = "https://api.groq.com/openai/v1/chat/completions";
+const GROQ_MODEL   = "llama-3.3-70b-versatile";
 
-const About = () => {
+const STATS = [
+  { num: "4+",  label: "Projects" },
+  { num: "1+",  label: "Yrs coding" },
+  { num: "10+", label: "Technologies" },
+  { num: "7.5", label: "CGPA / 10" },
+];
+
+export default function About() {
   const [messages, setMessages] = useState([
     {
-      role: 'assistant',
-      content: "Hi! I’m Ravi’s AI assistant. Ask me about his skills, projects, experience, or education !"
-
-    }
+      role: "bot",
+      text: "Hi! I'm Ravi's AI assistant. Ask me anything about his skills, projects, education, or experience!",
+    },
   ]);
-  const [input, setInput] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const [isChatOpen, setIsChatOpen] = useState(false);
-  const messagesEndRef = useRef(null);
-  const historyRef = useRef([]);
+  const [input,   setInput]   = useState("");
+  const [loading, setLoading] = useState(false);
+  const historyRef  = useRef([]);
+  const chatBodyRef = useRef(null);
 
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  };
 
   useEffect(() => {
-    scrollToBottom();
-  }, [messages]);
+    const el = chatBodyRef.current;
+    if (el) el.scrollTop = el.scrollHeight;
+  }, [messages, loading]);
 
-  useEffect(() => {
-    if (isChatOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'unset';
-    }
 
-    return () => {
-      document.body.style.overflow = 'unset';
-    };
-  }, [isChatOpen]);
+  const send = async (text) => {
+    const msg = (text ?? input).trim();
+    if (!msg || loading) return;
 
-  const sendMessage = async (e) => {
-    e.preventDefault();
-
-    if (!input.trim()) return;
-
-    const userMessage = input.trim();
-    setInput('');
-
-    setMessages(prev => [...prev, { role: 'user', content: userMessage }]);
-    setIsLoading(true);
+    setInput("");
+    setMessages((prev) => [...prev, { role: "user", text: msg }]);
+    setLoading(true);
+    historyRef.current.push({ role: "user", content: msg });
 
     try {
-      const API_KEY = import.meta.env.VITE_APP_GEMINI_API_KEY;
+      const key = import.meta.env.VITE_APP_GROQ_API_KEY;
+      if (!key) throw new Error("Groq API key missing");
 
-      if (!API_KEY) {
-        throw new Error('API key is missing');
-      }
-
-      const ai = new GoogleGenAI({ apiKey: API_KEY });
-
-      historyRef.current.push({
-        role: 'user',
-        parts: [{ text: userMessage }]
-      });
-
-      const response = await ai.models.generateContent({
-        model: "gemini-2.5-flash",
-        contents: historyRef.current,
-        config: {
-          systemInstruction: generateSystemInstruction(),
-          temperature: 0.7,
-          topK: 40,
-          topP: 0.95,
-          maxOutputTokens: 200,
+      const response = await fetch(GROQ_API_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${key}`,
         },
+        body: JSON.stringify({
+          model: GROQ_MODEL,
+          messages: [
+            { role: "system", content: generateSystemInstruction() },
+            ...historyRef.current,
+          ],
+          temperature: 0.7,
+          max_tokens: 300,
+          stream: false,
+        }),
       });
 
-      const aiResponse = response.text;
-
-      historyRef.current.push({
-        role: 'model',
-        parts: [{ text: aiResponse }]
-      });
-
-      setMessages(prev => [...prev, { role: 'assistant', content: aiResponse }]);
-
-    } catch (error) {
-      console.error('Error:', error);
-
-      let errorMessage = 'Sorry, I encountered an error. ';
-
-      if (error.message?.includes('API key') || error.message?.includes('API_KEY')) {
-        errorMessage += 'Please check your API key configuration.';
-      } else if (error.message?.includes('404') || error.message?.includes('not found')) {
-        errorMessage += 'The model was not found.';
-      } else {
-        errorMessage += 'Please try again.';
+      if (!response.ok) {
+        const err = await response.json().catch(() => ({}));
+        throw new Error(err?.error?.message || `Groq API error: ${response.status}`);
       }
 
-      setMessages(prev => [...prev, {
-        role: 'assistant',
-        content: errorMessage
-      }]);
+      const data  = await response.json();
+      const reply = data.choices?.[0]?.message?.content?.trim();
+      if (!reply) throw new Error("Empty response");
+
+      historyRef.current.push({ role: "assistant", content: reply });
+      setMessages((prev) => [...prev, { role: "bot", text: reply }]);
+
+    } catch (err) {
+      console.error("Groq Error:", err.message);
+      setMessages((prev) => [
+        ...prev,
+        { role: "bot", text: "Something went wrong. Please try again!" },
+      ]);
     } finally {
-      setIsLoading(false);
+      setLoading(false);
     }
   };
 
   return (
-    <>
-      <section id='about' className="about-section">
-        <div className="about-intro">
-          <h1>About Me </h1>
-          <p>Chat with my AI assistant for instant answers about my skills, projects, and experience.</p>
-          <button className="chat-trigger-btn" onClick={() => setIsChatOpen(true)}>
-            Start Chat
-            <span className="btn-icon">💬</span>
-          </button>
-        </div>
-      </section>
+    <section id="about" className="about-section">
+      <div className="section-wrap">
 
-      {isChatOpen && (
-        <>
-          <div
-            className="chat-backdrop"
-            onClick={() => setIsChatOpen(false)}
-          />
-          <div className="chatbot-modal">
-            <div className="chatbot-container">
-              <div className="chatbot-header">
-                <div className="header-left">
-                  <div className="avatar">RB</div>
-                  <div className="header-text">
-                    <h3>Ravi Bhushan AI Assistant</h3>
-                    <span className="status-text">Online</span>
-                  </div>
+        <div className="about-header">
+          <h2 className="section-title">About Me</h2>
+          <p className="section-sub">
+            A full-stack developer who loves building things that matter.
+          </p>
+        </div>
+
+        <div className="about-grid">
+
+          <div className="about-left">
+            <div className="about-photo-frame">
+              <img
+                className="about-photo"
+                src="https://d1jd6j7xdf8x95.cloudfront.net/images/profile_image.png"
+                alt="Ravi Bhushan"
+              />
+              <div className="about-photo-border" />
+              <span className="about-photo-badge">Full-Stack Dev · MERN</span>
+            </div>
+            <p className="about-bio">
+              I'm <strong>Ravi Bhushan</strong>, a B.Tech CSE student at CT
+              Institute (2023–2027), based in Bihar, India. I specialise in the{" "}
+              <strong>MERN stack</strong> — building secure auth systems,
+              full-stack tools, and AI-powered apps. Driven by clean code, real
+              impact, and shipping things people love.
+            </p>
+          </div>
+
+          <div className="about-right">
+            <div className="chat-panel">
+              <div className="chat-topbar">
+                <div className="chat-avatar">RB</div>
+                <div className="chat-topbar-info">
+                  <div className="chat-topbar-name">Ravi's AI Assistant</div>
+                  <div className="chat-topbar-status">Online</div>
                 </div>
-                <button className="close-chat-btn" onClick={() => setIsChatOpen(false)}>
-                  ×
-                </button>
               </div>
 
-              <div className="chatbot-messages">
-                {messages.map((message, index) => (
-                  <div key={index} className={`message ${message.role}`}>
-                    <div className="message-content">
-                      {message.role === 'assistant' && (
-                        <div className="message-avatar">
-                          <span>🤖</span>
-                        </div>
-                      )}
-                      <div className="message-bubble">
-                        <p>{message.content}</p>
-                      </div>
+              <div className="chat-messages" ref={chatBodyRef}>
+                {messages.map((m, i) => (
+                  <div key={i} className={"chat-msg " + m.role}>
+                    <div className="chat-msg-avatar">
+                      {m.role === "bot" ? "AI" : "You"}
                     </div>
+                    <div className="chat-bubble">{m.text}</div>
                   </div>
                 ))}
-
-                {isLoading && (
-                  <div className="message assistant">
-                    <div className="message-content">
-                      <div className="message-avatar">
-                        <span>🤖</span>
-                      </div>
-                      <div className="message-bubble">
-                        <div className="typing-indicator">
-                          <span></span>
-                          <span></span>
-                          <span></span>
-                        </div>
+                {loading && (
+                  <div className="chat-msg bot">
+                    <div className="chat-msg-avatar">AI</div>
+                    <div className="chat-bubble">
+                      <div className="typing-indicator">
+                        <span /><span /><span />
                       </div>
                     </div>
                   </div>
                 )}
-                <div ref={messagesEndRef} />
               </div>
 
-              <form className="chatbot-input" onSubmit={sendMessage}>
+              <form
+                className="chat-input-row"
+                onSubmit={(e) => { e.preventDefault(); send(); }}
+              >
                 <input
-                  type="text"
+                  className="chat-input-field"
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
-                  placeholder="Ask me anything about Ravi"
-                  disabled={isLoading}
+                  placeholder="Ask about skills, projects, experience..."
+                  disabled={loading}
+                  autoComplete="off"
                 />
-                <button type="submit" disabled={isLoading || !input.trim()}>
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                    <path d="M22 2L11 13" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                    <path d="M22 2L15 22L11 13L2 9L22 2Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                <button
+                  type="submit"
+                  className="chat-send-btn"
+                  disabled={loading || !input.trim()}
+                  aria-label="Send"
+                >
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none">
+                    <path d="M22 2L11 13" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
+                    <path d="M22 2L15 22L11 13L2 9L22 2Z" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
                 </button>
               </form>
             </div>
           </div>
-        </>
-      )}
-    </>
-  );
-};
 
-export default About;
+          <div className="about-stats">
+            {STATS.map(({ num, label }) => (
+              <div key={label} className="about-stat">
+                <div className="about-stat-num">{num}</div>
+                <div className="about-stat-label">{label}</div>
+              </div>
+            ))}
+          </div>
+
+        </div>
+      </div>
+    </section>
+  );
+}

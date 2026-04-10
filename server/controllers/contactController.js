@@ -1,59 +1,43 @@
-const Contact = require('../models/contact');
+import Contact from '../models/Contact.js'
 
-exports.createContact = async (req, res) => {
-    try {
-        console.log('Received contact form submission:', req.body);
+export const submitContact = async (req, res) => {
+  try {
+    const { fullName, email, phone, subject, message } = req.body
 
-        if (!req.body.fullName || !req.body.email || !req.body.subject || !req.body.message) {
-            return res.status(400).json({
-                success: false,
-                message: 'All required fields must be filled: fullName, email, subject, message'
-            });
-        }
-
-        const contact = new Contact({
-            fullName: req.body.fullName.trim(),
-            email: req.body.email.trim().toLowerCase(),
-            phone: req.body.phone ? req.body.phone.trim() : '',
-            subject: req.body.subject.trim(),
-            message: req.body.message.trim()
-        });
-
-        const savedContact = await contact.save();
-        console.log('Contact saved to MongoDB:', savedContact._id);
-
-        return res.status(201).json({
-            success: true,
-            message: 'Message sent successfully!',
-            data: {
-                id: savedContact._id,
-                timestamp: savedContact.createdAt
-            }
-        });
-
-    } catch (error) {
-        console.error('Error saving contact:', error);
-        if (error.name === 'ValidationError') {
-            const errors = {};
-            Object.keys(error.errors).forEach((key) => {
-                errors[key] = error.errors[key].message;
-            });
-
-            return res.status(400).json({
-                success: false,
-                message: 'Validation failed',
-                errors
-            });
-        }
-        if (error.code === 11000) {
-            return res.status(400).json({
-                success: false,
-                message: 'This email has already submitted a message'
-            });
-        }
-        return res.status(500).json({
-            success: false,
-            message: 'Internal server error. Please try again later.'
-        });
+    /* Basic presence check (schema validation handles the rest) */
+    if (!fullName || !email || !subject || !message) {
+      return res.status(400).json({
+        success: false,
+        message: 'Please fill in all required fields.',
+      })
     }
-};
+
+    const entry = await Contact.create({ fullName, email, phone, subject, message })
+
+    return res.status(201).json({
+      success: true,
+      message: 'Message received! I will get back to you soon.',
+      id: entry._id,
+    })
+  } catch (err) {
+    /* Mongoose validation errors */
+    if (err.name === 'ValidationError') {
+      const first = Object.values(err.errors)[0].message
+      return res.status(400).json({ success: false, message: first })
+    }
+    console.error('Contact submit error:', err)
+    return res.status(500).json({
+      success: false,
+      message: 'Something went wrong. Please try again later.',
+    })
+  }
+}
+
+export const getContacts = async (_req, res) => {
+  try {
+    const contacts = await Contact.find().sort({ createdAt: -1 })
+    return res.status(200).json({ success: true, count: contacts.length, data: contacts })
+  } catch (err) {
+    return res.status(500).json({ success: false, message: err.message })
+  }
+}

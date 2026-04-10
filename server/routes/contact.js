@@ -1,24 +1,9 @@
-const express = require('express');
-const router = express.Router();
-const { createContact } = require('../controllers/contactController');
+import express from 'express'
+import { submitContact, getContacts } from '../controllers/contactController.js'
 
-router.post('/', createContact);
+const router = express.Router()
 
-router.get('/', async (req, res) => {
-    try {
-        const Contact = require('../models/contact');
-        const contacts = await Contact.find().sort({ createdAt: -1 });
-        res.json({
-            success: true,
-            count: contacts.length,
-            data: contacts
-        });
-    } catch (error) {
-        res.status(500).json({
-            success: false,
-            message: 'Error fetching contacts'
-        });
-    }
-});
+router.post('/contact', submitContact)
+router.get('/contacts', getContacts)   /* optional admin view */
 
-module.exports = router;
+export default router
