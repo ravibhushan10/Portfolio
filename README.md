@@ -31,11 +31,8 @@ A modern, full-stack portfolio website with an **AI-powered chatbot**, working c
 
 ---
 
-## 🌐 Live Demo
+## 🌐 [Live Demo](https://ravibhushan-portfolio.vercel.app)
 
-👉 [ravibhushan-portfolio.vercel.app](https://ravibhushan-portfolio.vercel.app)
-
----
 
 ## 🌟 Features
 
@@ -241,27 +238,7 @@ Portfolio-Full-Stack/
 | POST   | `/api/contact`   | Submit a contact message |
 | GET    | `/api/contacts`  | List all messages (admin)|
 
-### POST `/api/contact` — Request Body
 
-```json
-{
-  "fullName": "Jane Doe",
-  "email": "jane@example.com",
-  "phone": "+91 9000000000",
-  "subject": "Collaboration Opportunity",
-  "message": "Hi Ravi, I'd love to work together on..."
-}
-```
-
-### Response
-
-```json
-{
-  "success": true,
-  "message": "Message received! I will get back to you soon.",
-  "id": "664abc..."
-}
-```
 
 ---
 
@@ -326,10 +303,11 @@ Portfolio-Full-Stack/
 
 **Ravi Bhushan**
 
-- 🌐 Portfolio: [ravibhushan-portfolio.vercel.app](https://ravibhushan-portfolio.vercel.app)
-- 💼 LinkedIn: [linkedin.com/in/ravibhushan-kumar](https://www.linkedin.com/in/ravibhushan-kumar/)
+- 💼 LinkedIn: [https://www.linkedin.com/in/ravibhushan-kumar-55b312344](https://www.linkedin.com/in/ravibhushan-kumar-55b312344/)
+-  🌐 Portfolio: [https://ravibhushan-portfolio.vercel.app](https://ravibhushan-portfolio.vercel.app)
 - 🐙 GitHub: [@ravibhushan10](https://github.com/ravibhushan10)
 - 📧 Email: ravibhushankumar87tp@gmail.com
+
 
 ---
 
