@@ -9,24 +9,34 @@ A modern, full-stack portfolio website with an **AI-powered chatbot**, working c
 <table align="center">
   <tr>
     <td align="center">
-      <img src="client/data/screenshots/portfolio/front.png" width="400"><br/>
-      <em>Landing / Hero</em>
+      <img src="screenshots/Home.png" width="400"><br/>
+      <em>Home Page</em>
     </td>
     <td align="center">
-      <img src="client/data/screenshots/portfolio/second.png" width="400"><br/>
+      <img src="screenshots/About.png" width="400"><br/>
       <em>About & AI Chatbot</em>
     </td>
   </tr>
   <tr>
     <td align="center">
-      <img src="client/data/screenshots/portfolio/third.png" width="400"><br/>
+        <img src="screenshots/Project.png" width="400"><br/>
       <em>Projects Section</em>
     </td>
     <td align="center">
-      <img src="client/data/screenshots/portfolio/fourth.png" width="400"><br/>
-      <em>Skills & Contact</em>
+      <img src="screenshots/Tools.png" width="400"><br/>
+      <em>Skills </em>
     </td>
   </tr>
+   <tr>
+    <td align="center">
+      <img src="screenshots/Message.png" width="400"><br/>
+      <em>Contact </em>
+    </td>
+     <td align="center">
+      <img src="screenshots/Project2.png" width="400"><br/>
+      <em>Project Details </em>
+    </td>
+     </tr>
 </table>
 
 ---
