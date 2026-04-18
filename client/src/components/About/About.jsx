@@ -1,190 +1,100 @@
-import { useState, useRef, useEffect } from "react";
-import { generateSystemInstruction } from "../../../data/Realdata/aiData";
-
-const GROQ_API_URL = "https://api.groq.com/openai/v1/chat/completions";
-const GROQ_MODEL   = "llama-3.3-70b-versatile";
+import './About.css'
 
 const STATS = [
-  { num: "4+",  label: "Projects" },
-  { num: "1+",  label: "Yrs coding" },
-  { num: "10+", label: "Technologies" },
-  { num: "7.5", label: "CGPA / 10" },
-];
+  { num: '4+',  label: 'Projects'     },
+  { num: '1+',  label: 'Yrs Coding'   },
+  { num: '10+', label: 'Technologies' },
+  { num: '7.5', label: 'CGPA / 10'    },
+]
 
 export default function About() {
-  const [messages, setMessages] = useState([
-    {
-      role: "bot",
-      text: "Hi! I'm Ravi's AI assistant. Ask me anything about his skills, projects, education, or experience!",
-    },
-  ]);
-  const [input,   setInput]   = useState("");
-  const [loading, setLoading] = useState(false);
-  const historyRef  = useRef([]);
-  const chatBodyRef = useRef(null);
-
-
-  useEffect(() => {
-    const el = chatBodyRef.current;
-    if (el) el.scrollTop = el.scrollHeight;
-  }, [messages, loading]);
-
-
-  const send = async (text) => {
-    const msg = (text ?? input).trim();
-    if (!msg || loading) return;
-
-    setInput("");
-    setMessages((prev) => [...prev, { role: "user", text: msg }]);
-    setLoading(true);
-    historyRef.current.push({ role: "user", content: msg });
-
-    try {
-      const key = import.meta.env.VITE_APP_GROQ_API_KEY;
-      if (!key) throw new Error("Groq API key missing");
-
-      const response = await fetch(GROQ_API_URL, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${key}`,
-        },
-        body: JSON.stringify({
-          model: GROQ_MODEL,
-          messages: [
-            { role: "system", content: generateSystemInstruction() },
-            ...historyRef.current,
-          ],
-          temperature: 0.7,
-          max_tokens: 300,
-          stream: false,
-        }),
-      });
-
-      if (!response.ok) {
-        const err = await response.json().catch(() => ({}));
-        throw new Error(err?.error?.message || `Groq API error: ${response.status}`);
-      }
-
-      const data  = await response.json();
-      const reply = data.choices?.[0]?.message?.content?.trim();
-      if (!reply) throw new Error("Empty response");
-
-      historyRef.current.push({ role: "assistant", content: reply });
-      setMessages((prev) => [...prev, { role: "bot", text: reply }]);
-
-    } catch (err) {
-      console.error("Groq Error:", err.message);
-      setMessages((prev) => [
-        ...prev,
-        { role: "bot", text: "Something went wrong. Please try again!" },
-      ]);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   return (
     <section id="about" className="about-section">
       <div className="section-wrap">
 
+        {/* Header */}
         <div className="about-header">
-          <h2 className="section-title">About Me</h2>
-          <p className="section-sub">
-            A full-stack developer who loves building things that matter.
-          </p>
+          <h2 className="section-title">The Person Behind the Code</h2>
+          <p className="section-sub">Passionate about building things that are fast, secure, and actually useful.</p>
         </div>
 
         <div className="about-grid">
 
+          {/* ── Left: Photo only ── */}
           <div className="about-left">
             <div className="about-photo-frame">
               <img
                 className="about-photo"
                 src="https://d1jd6j7xdf8x95.cloudfront.net/images/profile_image.png"
                 alt="Ravi Bhushan"
+                loading="lazy"
               />
+              {/* Decorative offset border */}
               <div className="about-photo-border" />
-              <span className="about-photo-badge">Full-Stack Dev · MERN</span>
+              {/* Badge */}
+              <span className="about-photo-badge">Full-Stack · MERN</span>
+              {/* Ambient glow */}
+              <div className="about-photo-glow" />
             </div>
-            <p className="about-bio">
-              I'm <strong>Ravi Bhushan</strong>, a B.Tech CSE student at CT
-              Institute (2023–2027), based in Bihar, India. I specialise in the{" "}
-              <strong>MERN stack</strong> — building secure auth systems,
-              full-stack tools, and AI-powered apps. Driven by clean code, real
-              impact, and shipping things people love.
-            </p>
           </div>
 
+          {/* ── Right: Bio + Stats ── */}
           <div className="about-right">
-            <div className="chat-panel">
-              <div className="chat-topbar">
-                <div className="chat-avatar">RB</div>
-                <div className="chat-topbar-info">
-                  <div className="chat-topbar-name">Ravi's AI Assistant</div>
-                  <div className="chat-topbar-status">Online</div>
-                </div>
-              </div>
 
-              <div className="chat-messages" ref={chatBodyRef}>
-                {messages.map((m, i) => (
-                  <div key={i} className={"chat-msg " + m.role}>
-                    <div className="chat-msg-avatar">
-                      {m.role === "bot" ? "AI" : "You"}
-                    </div>
-                    <div className="chat-bubble">{m.text}</div>
-                  </div>
-                ))}
-                {loading && (
-                  <div className="chat-msg bot">
-                    <div className="chat-msg-avatar">AI</div>
-                    <div className="chat-bubble">
-                      <div className="typing-indicator">
-                        <span /><span /><span />
-                      </div>
-                    </div>
-                  </div>
-                )}
-              </div>
+            {/* Bio */}
+            <div className="about-bio-block">
+              <p className="about-bio">
+                I'm <strong>Ravi Bhushan</strong>, a B.Tech CSE student at CT Institute
+                (2023–2027), based in Bihar, India. I specialise in the{' '}
+                <strong>MERN stack</strong> — building secure auth systems, full-stack
+                tools, and AI-powered applications.
+              </p>
+              <p className="about-bio" style={{ marginTop: '1rem' }}>
+                I care deeply about <strong>clean code</strong>, real-world impact, and
+                shipping products people actually love to use. Currently{' '}
+                <strong className="about-open">open to opportunities</strong> — whether
+                that's a role, a freelance project, or a cool collaboration.
+              </p>
 
-              <form
-                className="chat-input-row"
-                onSubmit={(e) => { e.preventDefault(); send(); }}
-              >
-                <input
-                  className="chat-input-field"
-                  value={input}
-                  onChange={(e) => setInput(e.target.value)}
-                  placeholder="Ask about skills, projects, experience..."
-                  disabled={loading}
-                  autoComplete="off"
-                />
-                <button
-                  type="submit"
-                  className="chat-send-btn"
-                  disabled={loading || !input.trim()}
-                  aria-label="Send"
-                >
-                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none">
-                    <path d="M22 2L11 13" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
-                    <path d="M22 2L15 22L11 13L2 9L22 2Z" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
+              {/* Subtle detail row */}
+              <div className="about-meta">
+                <span className="about-meta-item">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
+                    <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    <circle cx="12" cy="9" r="2.5" stroke="currentColor" strokeWidth="2"/>
                   </svg>
-                </button>
-              </form>
-            </div>
-          </div>
-
-          <div className="about-stats">
-            {STATS.map(({ num, label }) => (
-              <div key={label} className="about-stat">
-                <div className="about-stat-num">{num}   <span className="about-stat-label">{label}</span></div>
-
+                  Bihar, India
+                </span>
+                <span className="about-meta-item">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
+                    <rect x="2" y="3" width="20" height="14" rx="2" stroke="currentColor" strokeWidth="2"/>
+                    <path d="M8 21h8M12 17v4" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                  </svg>
+                  B.Tech CSE · 2023–2027
+                </span>
+                <span className="about-meta-item">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
+                    <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2"/>
+                    <path d="M12 6v6l4 2" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                  </svg>
+                  Open to Work
+                </span>
               </div>
-            ))}
-          </div>
+            </div>
 
+            {/* Stats grid */}
+            <div className="about-stats">
+              {STATS.map(({ num, label }) => (
+                <div key={label} className="about-stat">
+                  <div className="about-stat-num">{num}</div>
+                  <div className="about-stat-label">{label}</div>
+                </div>
+              ))}
+            </div>
+
+          </div>
         </div>
       </div>
     </section>
-  );
+  )
 }

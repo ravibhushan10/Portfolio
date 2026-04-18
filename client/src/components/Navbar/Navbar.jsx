@@ -48,7 +48,7 @@ export default function Navbar() {
     <>
       <nav className={"navbar" + (scrolled ? " scrolled" : "")}>
         <a href="#home" className="navbar-logo" onClick={e => { e.preventDefault(); scrollTo('home') }}>
-          Ravi<span>.dev</span>
+          Ravi Bhushan
         </a>
 
         <div className="navbar-links">
