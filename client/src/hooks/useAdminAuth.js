@@ -47,18 +47,20 @@ export function useAdminAuth() {
     setIsAuthed(false)
   }, [])
 
-  // Authenticated fetch helper
-  const authFetch = useCallback(async (path, options = {}) => {
-    const res = await fetch(`${API}/admin${path}`, {
-      ...options,
-      headers: {
-        ...(options.headers || {}),
-        Authorization: `Bearer ${token}`,
-      },
-    })
-    if (res.status === 401) { logout(); throw new Error('Session expired') }
-    return res
-  }, [token, logout])
+ const authFetch = useCallback(async (path, options = {}) => {
+  const isFormData = options.body instanceof FormData
+
+  const res = await fetch(`${API}/admin${path}`, {
+    ...options,
+    headers: {
+      // Only set Content-Type for JSON — never for FormData
+      ...(!isFormData && options.headers ? options.headers : {}),
+      Authorization: `Bearer ${token}`,
+    },
+  })
+  if (res.status === 401) { logout(); throw new Error('Session expired') }
+  return res
+}, [token, logout])
 
   return { isVerifying, isAuthed, token, login, logout, authFetch }
 }

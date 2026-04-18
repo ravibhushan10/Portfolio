@@ -7,7 +7,6 @@ export const getProjects = async (_req, res) => {
       .sort({ order: 1, createdAt: -1 })
       .select('-__v')
     res.set('Cache-Control', 'public, max-age=3000, s-maxage=6000')
-
     return res.json({ success: true, count: projects.length, data: projects })
   } catch (err) {
     return res.status(500).json({ success: false, message: err.message })
@@ -45,11 +44,14 @@ export const createProject = async (req, res) => {
       return res.status(400).json({ success: false, message: 'Title and description are required' })
     }
 
-    const coverImg = req.file
-      ? { url: req.file.path, publicId: req.file.filename }
+    // ── Cover image — comes via .fields() so it's in req.files.coverImage ──
+    const coverFile = req.files?.coverImage?.[0]
+    const coverImg  = coverFile
+      ? { url: coverFile.path, publicId: coverFile.filename }
       : { url: '', publicId: '' }
 
-    const carouselImgs = (req.files || []).map(f => ({
+    // ── Carousel images — comes via .fields() so it's in req.files.images ──
+    const carouselImgs = (req.files?.images || []).map(f => ({
       url     : f.path,
       publicId: f.filename,
     }))
@@ -91,28 +93,36 @@ export const updateProject = async (req, res) => {
       removeImageIds,
     } = req.body
 
-    if (title            !== undefined) project.title            = title
-    if (description      !== undefined) project.description      = description
-    if (fullDescription  !== undefined) project.fullDescription  = fullDescription
-    if (github           !== undefined) project.github           = github
-    if (live             !== undefined) project.live             = live
-    if (order            !== undefined) project.order            = Number(order)
-    if (isVisible        !== undefined) project.isVisible        = isVisible === 'true' || isVisible === true
-    if (tags             !== undefined) project.tags             = JSON.parse(tags)
-    if (features         !== undefined) project.features         = JSON.parse(features)
+    // ── Text fields ──
+    if (title           !== undefined) project.title           = title
+    if (description     !== undefined) project.description     = description
+    if (fullDescription !== undefined) project.fullDescription = fullDescription
+    if (github          !== undefined) project.github          = github
+    if (live            !== undefined) project.live            = live
+    if (order           !== undefined) project.order           = Number(order)
+    if (isVisible       !== undefined) project.isVisible       = isVisible === 'true' || isVisible === true
+    if (tags            !== undefined) project.tags            = JSON.parse(tags)
+    if (features        !== undefined) project.features        = JSON.parse(features)
 
-    if (req.file) {
+    // ── Replace cover image ──
+    // Route uses .fields() so cover is in req.files.coverImage[0], NOT req.file
+    const coverFile = req.files?.coverImage?.[0]
+    if (coverFile) {
       if (project.img?.publicId) {
         await cloudinary.uploader.destroy(project.img.publicId).catch(() => {})
       }
-      project.img = { url: req.file.path, publicId: req.file.filename }
+      project.img = { url: coverFile.path, publicId: coverFile.filename }
     }
 
-    if (req.files?.length) {
-      const newImgs = req.files.map(f => ({ url: f.path, publicId: f.filename }))
+    // ── Add new carousel images ──
+    // Route uses .fields() so carousel images are in req.files.images, NOT req.files directly
+    const newCarousel = req.files?.images || []
+    if (newCarousel.length) {
+      const newImgs = newCarousel.map(f => ({ url: f.path, publicId: f.filename }))
       project.images.push(...newImgs)
     }
 
+    // ── Remove specific carousel images ──
     if (removeImageIds) {
       const ids = JSON.parse(removeImageIds)
       await Promise.allSettled(ids.map(pid => cloudinary.uploader.destroy(pid)))
