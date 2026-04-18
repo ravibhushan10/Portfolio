@@ -51,6 +51,18 @@ app.use((err, _req, res, _next) => {
   })
 })
 
+if (process.env.NODE_ENV === 'production') {
+  const PING_URL = process.env.RENDER_EXTERNAL_URL || ''
+  if (PING_URL) {
+    setInterval(async () => {
+      try {
+        await fetch(`${PING_URL}/api/health`)
+        console.log('🏓 Keep-alive ping sent')
+      } catch {}
+    }, 10 * 60 * 1000)  
+  }
+}
+
 /* ── Boot ── */
 connectDB().then(async () => {
   await seedAdmin()

@@ -6,6 +6,7 @@ export const getProjects = async (_req, res) => {
     const projects = await Project.find({ isVisible: true })
       .sort({ order: 1, createdAt: -1 })
       .select('-__v')
+    res.set('Cache-Control', 'public, max-age=3000, s-maxage=6000')
 
     return res.json({ success: true, count: projects.length, data: projects })
   } catch (err) {
