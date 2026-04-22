@@ -46,10 +46,11 @@ export default function ChatWidget() {
 
   const systemInstruction = useMemo(() => generateSystemInstruction(), [])
 
-  // ── Set default posY to vertical center on mount ──
-  useEffect(() => {
-    setPosY(window.innerHeight / 2 - 24)
-  }, [])
+useEffect(() => {
+  const minY = window.innerHeight * 0.20
+  const maxY = window.innerHeight * 0.80 - 39
+  setPosY(Math.max(minY, Math.min(maxY, window.innerHeight / 2 - 24)))
+}, [])
 
   // ── Auto scroll ──
   const scrollToBottom = useCallback((force = false) => {
@@ -70,28 +71,31 @@ export default function ChatWidget() {
     if (open) setTimeout(() => inputRef.current?.focus(), 150)
   }, [open])
 
-  // ── Drag handlers ──
-  const onPointerDown = useCallback((e) => {
-    // Only drag on the button itself, not when clicking to open
-    dragging.current   = false
-    dragStartY.current = e.clientY
-    dragStartPosY.current = posY ?? (window.innerHeight / 2 - 24)
+ const onPointerDown = useCallback((e) => {
+  dragging.current   = false
+  dragStartY.current = e.clientY
+  dragStartPosY.current = posY ?? (window.innerHeight / 2 - 24)
 
-    const onMove = (me) => {
-      const delta = me.clientY - dragStartY.current
-      if (Math.abs(delta) > 4) dragging.current = true
-      const newY = Math.max(16, Math.min(window.innerHeight - 56, dragStartPosY.current + delta))
-      setPosY(newY)
-    }
+  const onMove = (me) => {
+    const delta = me.clientY - dragStartY.current
+    if (Math.abs(delta) > 4) dragging.current = true
 
-    const onUp = () => {
-      window.removeEventListener('pointermove', onMove)
-      window.removeEventListener('pointerup',   onUp)
-    }
+    // ── Constrain to middle 40% (exclude top 30% and bottom 30%) ──
+    const minY = window.innerHeight * 0.20          // 30% from top
+    const maxY = window.innerHeight * 0.80 - 39     // 30% from bottom (minus btn height)
 
-    window.addEventListener('pointermove', onMove)
-    window.addEventListener('pointerup',   onUp)
-  }, [posY])
+    const newY = Math.max(minY, Math.min(maxY, dragStartPosY.current + delta))
+    setPosY(newY)
+  }
+
+  const onUp = () => {
+    window.removeEventListener('pointermove', onMove)
+    window.removeEventListener('pointerup',   onUp)
+  }
+
+  window.addEventListener('pointermove', onMove)
+  window.addEventListener('pointerup',   onUp)
+}, [posY])
 
   const handleBtnClick = useCallback(() => {
     if (dragging.current) return // was dragged, not clicked
