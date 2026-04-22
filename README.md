@@ -9,32 +9,32 @@ A modern, full-stack portfolio website with an **AI-powered chatbot**, working c
 <table align="center">
   <tr>
     <td align="center">
-      <img src="screenshots/Home.png" width="400"><br/>
+      <img src="screenshots/first.png" width="400"><br/>
       <em>Home Page</em>
     </td>
     <td align="center">
-      <img src="screenshots/About.png" width="400"><br/>
-      <em>About & AI Chatbot</em>
+      <img src="screenshots/second.png" width="400"><br/>
+      <em>About </em>
     </td>
   </tr>
   <tr>
     <td align="center">
-        <img src="screenshots/Project.png" width="400"><br/>
+        <img src="screenshots/third.png" width="400"><br/>
       <em>Projects Section</em>
     </td>
     <td align="center">
-      <img src="screenshots/Tools.png" width="400"><br/>
-      <em>Skills </em>
+      <img src="screenshots/fourth.png" width="400"><br/>
+      <em>Contact section </em>
     </td>
   </tr>
    <tr>
     <td align="center">
-      <img src="screenshots/Message.png" width="400"><br/>
-      <em>Contact </em>
+      <img src="screenshots/fifth.png" width="400"><br/>
+      <em>AI chatbot</em>
     </td>
      <td align="center">
-      <img src="screenshots/Project2.png" width="400"><br/>
-      <em>Project Details </em>
+      <img src="screenshots/sixth.png" width="400"><br/>
+      <em>Light theme </em>
     </td>
      </tr>
 </table>
