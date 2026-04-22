@@ -977,49 +977,92 @@
   font-size: .75rem; color: #4ade80; font-weight: 600;
 }
 
-/* ═══════════════════════════════════════════════════
-   ADMIN — RESPONSIVE
-═══════════════════════════════════════════════════ */
+@media (max-width: 1024px) {
+  .admin-stats-row      { flex-wrap: wrap; }
+  .admin-stat-card      { flex: 1 1 calc(50% - .5rem); }
+  .admin-tab-content    { padding: 1.25rem 1.5rem; }
+}
+
 @media (max-width: 768px) {
+  /* Sidebar goes horizontal across top */
+  .admin-shell          { flex-direction: column; }
   .admin-sidebar {
-    width: 100%; height: auto;
-    position: static; flex-direction: row;
-    flex-wrap: wrap; border-right: none;
+    width: 100%;
+    height: auto;
+    position: static;
+    flex-direction: row;
+    flex-wrap: wrap;
+    border-right: none;
     border-bottom: 1px solid var(--border);
   }
-  .admin-shell   { flex-direction: column; }
-  .admin-sidebar-logo { padding: .875rem 1rem; flex: 1; }
-  .admin-nav     { flex-direction: row; padding: .375rem .5rem; gap: .2rem; flex-wrap: wrap; }
+  .admin-sidebar-logo   { padding: .875rem 1rem; flex: 1; border-bottom: none; }
+  .admin-nav {
+    flex-direction: row;
+    padding: .375rem .5rem;
+    gap: .2rem;
+    flex-wrap: wrap;
+    border-top: 1px solid var(--border);
+    width: 100%;
+  }
   .admin-nav-item {
-    padding: .45rem .65rem; font-size: .8rem; width: auto;
-    border-left: none;
+    padding: .45rem .65rem;
+    font-size: .8rem;
+    width: auto;
   }
   .admin-nav-item.active::before { display: none; }
   .admin-sidebar-footer {
-    flex-direction: row; border-top: none;
+    flex-direction: row;
+    border-top: none;
     border-left: 1px solid var(--border);
-    padding: .375rem .5rem; gap: .2rem;
+    padding: .375rem .5rem;
+    gap: .2rem;
   }
-  .admin-tab-content  { padding: 1rem; }
-  .admin-main-header  { padding: 1rem; }
-  .admin-msg-date     { display: none; }
-  .admin-form-row     { flex-direction: column; }
-  .admin-stats-row    { gap: .5rem; }
-  .admin-stat-card    { padding: .75rem; }
-  .admin-stat-icon    { display: none; }
-  .admin-stat-num     { font-size: 1.35rem; }
-  .admin-modal-body   { padding: 1rem; }
-  .admin-modal-header { padding: .875rem 1rem; }
-  .admin-modal-footer { padding: .75rem 1rem; }
-  .admin-project-row  { gap: .5rem; padding: .75rem; }
-  .admin-project-links { display: none; }
+
+  /* Main */
+  .admin-main-header    { padding: 1rem; }
+  .admin-tab-content    { padding: 1rem; }
+
+  /* Stats */
+  .admin-stats-row      { flex-direction: column; gap: .5rem; }
+  .admin-stat-card      { padding: .75rem; }
+  .admin-stat-icon      { display: none; }
+  .admin-stat-num       { font-size: 1.35rem; }
+
+  /* Toolbar */
+  .admin-toolbar        { flex-direction: column; align-items: stretch; }
+  .admin-search-wrap    { min-width: unset; }
+  .admin-filter-tabs    { flex-wrap: wrap; }
+
+  /* Messages */
+  .admin-msg-date       { display: none; }
   .admin-msg-footer-row { flex-direction: column; align-items: stretch; }
+
+  /* Project rows */
+  .admin-project-row    { gap: .5rem; padding: .75rem; }
+  .admin-project-links  { display: none; }
+
+  /* Modal */
+  .admin-modal          { max-width: 100%; max-height: 100vh; border-radius: 0; }
+  .admin-modal-body     { padding: 1rem; }
+  .admin-modal-header   { padding: .875rem 1rem; }
+  .admin-modal-footer   { padding: .75rem 1rem; }
+  .admin-form-row       { flex-direction: column; }
 }
 
 @media (max-width: 480px) {
-  .admin-carousel-grid { grid-template-columns: repeat(auto-fill, minmax(72px, 1fr)); }
-  .admin-msg-meta { min-width: 120px; max-width: 130px; }
-  .admin-filter-tabs { gap: .2rem; }
-  .admin-filter-tab  { padding: .4rem .65rem; font-size: .75rem; }
-  .admin-count-num   { font-size: 1.25rem; }
+  .admin-carousel-grid  { grid-template-columns: repeat(auto-fill, minmax(72px, 1fr)); }
+  .admin-msg-meta       { min-width: 110px; max-width: 120px; }
+  .admin-filter-tabs    { gap: .2rem; }
+  .admin-filter-tab     { padding: .4rem .65rem; font-size: .75rem; }
+  .admin-count-num      { font-size: 1.25rem; }
+  .admin-main-title     { font-size: 1rem; }
+  .admin-add-btn        { padding: .45rem .85rem; font-size: .8rem; }
+  .admin-projects-header { flex-wrap: wrap; gap: .75rem; }
+}
+
+@media (max-width: 360px) {
+  .admin-nav-item       { font-size: .75rem; padding: .4rem .5rem; }
+  .admin-stat-card      { flex: 1 1 100%; }
+  .admin-msg-name       { font-size: .78rem; }
+  .admin-msg-subject    { font-size: .78rem; }
 }
