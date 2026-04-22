@@ -166,10 +166,6 @@ useEffect(() => {
                     </div>
 
                     <div className="project-footer">
-                      {/* View counter badge */}
-                      {p.views > 0 && (
-                        <span className="project-views">{p.views} views</span>
-                      )}
                       {p.github && (
                         <a href={p.github} target="_blank" rel="noopener noreferrer"
                           className="project-link" onClick={e => e.stopPropagation()}>

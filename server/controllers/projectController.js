@@ -6,7 +6,7 @@ export const getProjects = async (_req, res) => {
     const projects = await Project.find({ isVisible: true })
       .sort({ order: 1, createdAt: -1 })
       .select('-__v')
-    res.set('Cache-Control', 'public, max-age=3000, s-maxage=6000')
+    res.set('Cache-Control', 'public, max-age=60, s-maxage=300, stale-while-revalidate=60')
     return res.json({ success: true, count: projects.length, data: projects })
   } catch (err) {
     return res.status(500).json({ success: false, message: err.message })
@@ -129,6 +129,11 @@ export const updateProject = async (req, res) => {
       project.images = project.images.filter(img => !ids.includes(img.publicId))
     }
 
+    // ── Reorder carousel images ──
+if (req.body.imageOrder) {
+  const order = JSON.parse(req.body.imageOrder) // array of publicIds
+  project.images.sort((a, b) => order.indexOf(a.publicId) - order.indexOf(b.publicId))
+}
     await project.save()
     return res.json({ success: true, data: project })
   } catch (err) {
