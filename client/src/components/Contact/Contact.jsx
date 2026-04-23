@@ -128,7 +128,7 @@ const handleCardClick = (e, card) => {
   if (card.title === 'Email') {
     e.preventDefault();
     window.open(
-      `https://mail.google.com/mail/?view=cm&to=${card.val}`,
+      `https://mail.google.com/mail/u/0/?view=cm&fs=1&to=${card.val}`,
       '_blank'
     );
   }
