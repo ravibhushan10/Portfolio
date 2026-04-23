@@ -12,7 +12,6 @@ export default function About() {
     <section id="about" className="about-section">
       <div className="section-wrap">
 
-        {/* Header */}
         <div className="about-header">
           <h2 className="section-title">The Person Behind the Code</h2>
           <p className="section-sub">Passionate about building things that are fast, secure, and actually useful.</p>
@@ -20,7 +19,6 @@ export default function About() {
 
         <div className="about-grid">
 
-          {/* ── Left: Photo only ── */}
           <div className="about-left">
             <div className="about-photo-frame">
               <img
@@ -29,19 +27,14 @@ export default function About() {
                 alt="Ravi Bhushan"
                 loading="lazy"
               />
-              {/* Decorative offset border */}
+
               <div className="about-photo-border" />
-              {/* Badge */}
               <span className="about-photo-badge">Full-Stack · MERN</span>
-              {/* Ambient glow */}
               <div className="about-photo-glow" />
             </div>
           </div>
-
-          {/* ── Right: Bio + Stats ── */}
           <div className="about-right">
 
-            {/* Bio */}
             <div className="about-bio-block">
               <p className="about-bio">
                 I'm <strong>Ravi Bhushan</strong>, a B.Tech CSE student at CT Institute
@@ -55,8 +48,6 @@ export default function About() {
                 <strong className="about-open">open to opportunities</strong> — whether
                 that's a role, a freelance project, or a cool collaboration.
               </p>
-
-              {/* Subtle detail row */}
               <div className="about-meta">
                 <span className="about-meta-item">
                   <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
@@ -81,8 +72,6 @@ export default function About() {
                 </span>
               </div>
             </div>
-
-            {/* Stats grid */}
             <div className="about-stats">
               {STATS.map(({ num, label }) => (
                 <div key={label} className="about-stat">

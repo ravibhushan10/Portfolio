@@ -11,7 +11,7 @@ const app  = express()
 const PORT = process.env.PORT || 5000
 
 app.use(cors({
-  origin     : process.env.CLIENT_URL,   // your Vercel URL
+  origin     : process.env.CLIENT_URL,
   methods    : ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
   credentials: true,
 }))
@@ -27,7 +27,7 @@ app.get('/api/health', (_req, res) => {
 app.use('/api',       publicRoutes)
 app.use('/api/admin', adminRoutes)
 
-// ── 404 — API only, NO static file fallback ──
+
 app.use((_req, res) => {
   res.status(404).json({ success: false, message: 'Route not found' })
 })

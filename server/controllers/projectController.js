@@ -44,13 +44,13 @@ export const createProject = async (req, res) => {
       return res.status(400).json({ success: false, message: 'Title and description are required' })
     }
 
-    // ── Cover image — comes via .fields() so it's in req.files.coverImage ──
+
     const coverFile = req.files?.coverImage?.[0]
     const coverImg  = coverFile
       ? { url: coverFile.path, publicId: coverFile.filename }
       : { url: '', publicId: '' }
 
-    // ── Carousel images — comes via .fields() so it's in req.files.images ──
+
     const carouselImgs = (req.files?.images || []).map(f => ({
       url     : f.path,
       publicId: f.filename,
@@ -93,7 +93,7 @@ export const updateProject = async (req, res) => {
       removeImageIds,
     } = req.body
 
-    // ── Text fields ──
+
     if (title           !== undefined) project.title           = title
     if (description     !== undefined) project.description     = description
     if (fullDescription !== undefined) project.fullDescription = fullDescription
@@ -104,8 +104,8 @@ export const updateProject = async (req, res) => {
     if (tags            !== undefined) project.tags            = JSON.parse(tags)
     if (features        !== undefined) project.features        = JSON.parse(features)
 
-    // ── Replace cover image ──
-    // Route uses .fields() so cover is in req.files.coverImage[0], NOT req.file
+
+
     const coverFile = req.files?.coverImage?.[0]
     if (coverFile) {
       if (project.img?.publicId) {
@@ -114,24 +114,24 @@ export const updateProject = async (req, res) => {
       project.img = { url: coverFile.path, publicId: coverFile.filename }
     }
 
-    // ── Add new carousel images ──
-    // Route uses .fields() so carousel images are in req.files.images, NOT req.files directly
+
+
     const newCarousel = req.files?.images || []
     if (newCarousel.length) {
       const newImgs = newCarousel.map(f => ({ url: f.path, publicId: f.filename }))
       project.images.push(...newImgs)
     }
 
-    // ── Remove specific carousel images ──
+
     if (removeImageIds) {
       const ids = JSON.parse(removeImageIds)
       await Promise.allSettled(ids.map(pid => cloudinary.uploader.destroy(pid)))
       project.images = project.images.filter(img => !ids.includes(img.publicId))
     }
 
-    // ── Reorder carousel images ──
+
 if (req.body.imageOrder) {
-  const order = JSON.parse(req.body.imageOrder) // array of publicIds
+  const order = JSON.parse(req.body.imageOrder)
   project.images.sort((a, b) => order.indexOf(a.publicId) - order.indexOf(b.publicId))
 }
     await project.save()

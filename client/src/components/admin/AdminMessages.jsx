@@ -116,7 +116,7 @@ export default function AdminMessages({ authFetch }) {
   return (
     <div className="admin-tab-content">
 
-      {/* Stats */}
+
       <div className="admin-stats-row">
         <div className="admin-stat-card">
           <div className="admin-stat-icon" style={{ background: 'rgba(100,116,139,.12)', color: '#94a3b8' }}>
@@ -147,7 +147,7 @@ export default function AdminMessages({ authFetch }) {
         </div>
       </div>
 
-      {/* Toolbar */}
+
       <div className="admin-toolbar">
         <div className="admin-search-wrap">
           <Search size={13} className="admin-search-icon" />
@@ -180,7 +180,7 @@ export default function AdminMessages({ authFetch }) {
         </button>
       </div>
 
-      {/* Messages */}
+
       {loading ? (
         <div className="admin-loading">
           <span className="admin-spinner-lg" />
@@ -197,25 +197,25 @@ export default function AdminMessages({ authFetch }) {
             <div key={msg._id}
               className={`admin-msg-item ${!msg.isRead ? 'unread' : ''} ${expanded === msg._id ? 'open' : ''}`}
             >
-              {/* Row */}
+
               <div className="admin-msg-row" onClick={() => expand(msg)}>
 
-                {/* Unread dot */}
+
                 <div className={`admin-msg-dot ${!msg.isRead ? 'active' : ''}`} />
 
-                {/* Avatar */}
+
                 <div className="admin-msg-avatar"
                   style={{ background: getAvatarColor(msg.fullName) }}>
                   {getInitials(msg.fullName)}
                 </div>
 
-                {/* Meta */}
+
                 <div className="admin-msg-meta">
                   <span className="admin-msg-name">{msg.fullName}</span>
                   <span className="admin-msg-email">{msg.email}</span>
                 </div>
 
-                {/* Subject */}
+
                 <div className="admin-msg-subject-wrap">
                   <span className={`admin-msg-subject ${!msg.isRead ? 'bold' : ''}`}>
                     {msg.subject}
@@ -227,10 +227,10 @@ export default function AdminMessages({ authFetch }) {
                   )}
                 </div>
 
-                {/* Date */}
+
                 <div className="admin-msg-date">{fmt(msg.createdAt)}</div>
 
-                {/* Actions */}
+
                 <div className="admin-msg-actions" onClick={e => e.stopPropagation()}>
                   <button
                     className={`admin-icon-btn ${msg.isStarred ? 'starred' : ''}`}
@@ -253,11 +253,11 @@ export default function AdminMessages({ authFetch }) {
                 </div>
               </div>
 
-              {/* Expanded */}
+
               {expanded === msg._id && (
                 <div className="admin-msg-body">
 
-                  {/* Message bubble */}
+
                   <div className="admin-msg-bubble-wrap">
                     <div className="admin-msg-bubble-avatar"
                       style={{ background: getAvatarColor(msg.fullName) }}>
@@ -272,7 +272,7 @@ export default function AdminMessages({ authFetch }) {
                     </div>
                   </div>
 
-                  {/* Note + Reply row */}
+
                   <div className="admin-msg-footer-row">
                     <div className="admin-msg-note-wrap">
                       <div className="admin-note-header">
@@ -313,7 +313,7 @@ export default function AdminMessages({ authFetch }) {
         </div>
       )}
 
-      {/* Pagination */}
+
       {total > LIMIT && (
         <div className="admin-pagination">
           <button className="admin-page-btn" disabled={page === 1}

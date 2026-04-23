@@ -10,6 +10,7 @@ const INFO_CARDS = [
     title: 'Email',
     val: 'ravibhushankumar87tp@gmail.com',
     note: 'Replies within 24 hours',
+    copyable: true,
   },
   {
     href: 'tel:+919199519751',
@@ -19,7 +20,7 @@ const INFO_CARDS = [
     note: 'Mon–Fri, 9 am–6 pm IST',
   },
   {
-    href: 'https://www.google.com/maps/place/Langat+Singh+College/@26.1165757,85.3601384,15z/data=!3m1!4b1!4m6!3m5!1s0x39ed10e119cd7b81:0x4a58910aefe6de60!8m2!3d26.1165576!4d85.3785924!16s%2Fm%2F0tkj619?entry=ttu&g_ep=EgoyMDI2MDQxNS4wIKXMDSoASAFQAw%3D%3D',
+    href: 'https://shorturl.at/f7BRZ',
     icon: <FaMapMarkerAlt />,
     title: 'Location',
     val: 'Muzaffarpur, Bihar, India',
@@ -37,7 +38,6 @@ const FOOTER_SOCIALS = [
 
 const EMPTY_FORM = { fullName: '', email: '', phone: '', subject: '', message: '' }
 
-// ── Validation rules per field ──────────────────────────────────────────────
 const VALIDATORS = {
   fullName: (v) => {
     if (!v.trim())               return 'Full name is required.'
@@ -67,7 +67,6 @@ const VALIDATORS = {
   },
 }
 
-// Fields in order
 const FIELD_ORDER = ['fullName', 'email', 'phone', 'subject', 'message']
 
 export default function Contact() {
@@ -78,11 +77,10 @@ export default function Contact() {
   const [loading,     setLoading]     = useState(false)
   const [successMsg,  setSuccessMsg]  = useState('')
 
-  // Refs for auto-dismiss timers
+
   const successTimerRef = useRef(null)
   const errorTimerRef = useRef(null)
 
-  // ── Auto-dismiss success message after 3 seconds ──────────────────────────
   useEffect(() => {
     if (successMsg) {
       if (successTimerRef.current) {
@@ -100,7 +98,6 @@ export default function Contact() {
     }
   }, [successMsg])
 
-  // ── Auto-dismiss generic error after 3 seconds ────────────────────────────
   useEffect(() => {
     if (genericError) {
       if (errorTimerRef.current) {
@@ -118,7 +115,6 @@ export default function Contact() {
     }
   }, [genericError])
 
-  // ── Get the FIRST field that has an error and has been touched ────────────
   const getFirstErrorField = (currentForm, currentTouched) => {
     for (const field of FIELD_ORDER) {
       const err = VALIDATORS[field](currentForm[field])
@@ -128,18 +124,24 @@ export default function Contact() {
     }
     return {}
   }
+const handleCardClick = (e, card) => {
+  if (card.title === 'Email') {
+    e.preventDefault();
+    window.open(
+      `https://mail.google.com/mail/?view=cm&to=${card.val}`,
+      '_blank'
+    );
+  }
+};
 
-  // ── onChange - just update form, NO validation while typing ───────────────
   const onChange = (e) => {
     const { name, value } = e.target
     const updatedForm = { ...form, [name]: value }
     setForm(updatedForm)
 
-    // Clear messages when user starts typing
     setGenericError('')
     setSuccessMsg('')
 
-    // Clear timers
     if (successTimerRef.current) {
       clearTimeout(successTimerRef.current)
       successTimerRef.current = null
@@ -149,11 +151,9 @@ export default function Contact() {
       errorTimerRef.current = null
     }
 
-    // Mark as touched
     const updatedTouched = { ...touched, [name]: true }
     setTouched(updatedTouched)
 
-    // DON'T validate while typing - clear errors for this field while typing
     setFieldErrors(prev => {
       const newErrors = { ...prev }
       delete newErrors[name]
@@ -161,22 +161,19 @@ export default function Contact() {
     })
   }
 
-  // ── onBlur - validate ONLY the field that was just left ───────────────────
   const onBlur = (e) => {
     const { name } = e.target
 
-    // Mark this field as touched
     const updatedTouched = { ...touched, [name]: true }
     setTouched(updatedTouched)
 
-    // Check if THIS field has an error
     const thisFieldError = VALIDATORS[name](form[name])
 
     if (thisFieldError) {
-      // Check if this is the first broken field in order
+
       let isFirstBroken = true
       for (const field of FIELD_ORDER) {
-        if (field === name) break // Stop when we reach current field
+        if (field === name) break
         const prevErr = VALIDATORS[field](form[field])
         if (prevErr && updatedTouched[field]) {
           isFirstBroken = false
@@ -185,19 +182,19 @@ export default function Contact() {
       }
 
       if (isFirstBroken) {
-        // Show error for this field
+
         setFieldErrors({ [name]: thisFieldError })
       }
-      // If not first broken, don't show any error (first broken field already showing)
+
     } else {
-      // This field is valid, clear its error
+
       setFieldErrors(prev => {
         const newErrors = { ...prev }
         delete newErrors[name]
 
-        // After clearing, check if there's another broken field that should show
+
         if (Object.keys(newErrors).length === 0) {
-          // Find the next broken field that's been touched
+
           for (const field of FIELD_ORDER) {
             const err = VALIDATORS[field](form[field])
             if (err && updatedTouched[field]) {
@@ -211,13 +208,13 @@ export default function Contact() {
     }
   }
 
-  // ── onSubmit ──────────────────────────────────────────────────────────────
+
   const onSubmit = async (e) => {
     e.preventDefault()
     setGenericError('')
     setSuccessMsg('')
 
-    // Clear timers
+
     if (successTimerRef.current) {
       clearTimeout(successTimerRef.current)
       successTimerRef.current = null
@@ -227,11 +224,10 @@ export default function Contact() {
       errorTimerRef.current = null
     }
 
-    // Touch all fields
+
     const allTouched = FIELD_ORDER.reduce((acc, f) => ({ ...acc, [f]: true }), {})
     setTouched(allTouched)
 
-    // Find first field error
     for (const field of FIELD_ORDER) {
       const err = VALIDATORS[field](form[field])
       if (err) {
@@ -240,7 +236,6 @@ export default function Contact() {
       }
     }
 
-    // All valid - submit
     setLoading(true)
     setFieldErrors({})
     try {
@@ -276,7 +271,6 @@ export default function Contact() {
       <section id="contact" className="contact-section">
         <div className="section-wrap">
 
-          {/* Editorial heading */}
           <div className="contact-hero-text">
             <h2 className="contact-big-title">
               Let's build<br />
@@ -289,30 +283,30 @@ export default function Contact() {
 
           <div className="contact-grid">
 
-            {/* ── Left: info ── */}
-            <div>
-              <div className="contact-info-list">
-                {INFO_CARDS.map(({ href, icon, title, val, note, ext }) => (
-                  <a key={title} href={href} className="contact-info-card"
-                    {...(ext ? { target: '_blank', rel: 'noopener noreferrer' } : {})}>
-                    <div className="contact-info-icon">{icon}</div>
-                    <div>
-                      <div className="contact-info-title">{title}</div>
-                      <div className="contact-info-val">{val}</div>
-                      <div className="contact-info-note">{note}</div>
-                    </div>
-                  </a>
-                ))}
-              </div>
-            </div>
 
-            {/* ── Right: form ── */}
+<div>
+  <div className="contact-info-list">
+    {INFO_CARDS.map(({ href, icon, title, val, note, ext }) => (
+      <a key={title} href={href} className="contact-info-card"
+        onClick={(e) => handleCardClick(e, { title, val })}
+        {...(ext ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+        >
+        <div className="contact-info-icon">{icon}</div>
+<div>
+  <div className="contact-info-title">{title}</div>
+  <div className="contact-info-val">{val}</div>
+  <div className="contact-info-note">{note}</div>
+</div>
+      </a>
+    ))}
+  </div>
+</div>
+
             <div className="contact-form-wrap">
               <div className="contact-form-title">Send a message</div>
 
               <form onSubmit={onSubmit} noValidate>
 
-                {/* Row 1: Full Name + Email */}
                 <div className="form-row">
                   <div className="form-group">
                     <label className="form-label">
@@ -361,7 +355,6 @@ export default function Contact() {
                   </div>
                 </div>
 
-                {/* Row 2: Phone + Subject */}
                 <div className="form-row">
                   <div className="form-group">
                     <label className="form-label">Phone</label>
@@ -407,7 +400,6 @@ export default function Contact() {
                   </div>
                 </div>
 
-                {/* Message */}
                 <div className="form-group full" style={{ marginBottom: 0 }}>
                   <label className="form-label">
                     Message <span className="form-required">*</span>
@@ -432,14 +424,12 @@ export default function Contact() {
                   )}
                 </div>
 
-                {/* Generic error */}
                 {genericError && (
                   <div className="generic-error">
                     {genericError}
                   </div>
                 )}
 
-                {/* Success message */}
                 {successMsg && (
                   <div className="generic-success">
                     {successMsg}
@@ -458,7 +448,6 @@ export default function Contact() {
           </div>
         </div>
 
-        {/* Footer strip */}
         <div className="footer-strip">
           <p className="footer-copy">
             © {new Date().getFullYear()} <span>Ravi Bhushan</span>. All rights reserved.

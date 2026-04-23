@@ -18,7 +18,7 @@ export default function AdminDashboard() {
   const { isVerifying, isAuthed, login, logout, authFetch } = useAdminAuth()
   const [tab, setTab] = useState('messages')
 
-  // Password change state
+
   const [pwModal,  setPwModal]  = useState(false)
   const [pwForm,   setPwForm]   = useState({ currentPassword: '', newPassword: '' })
   const [pwMsg,    setPwMsg]    = useState('')
@@ -60,7 +60,7 @@ export default function AdminDashboard() {
   return (
     <div className="admin-shell">
 
-      {/* Sidebar */}
+
       <aside className="admin-sidebar">
         <div className="admin-sidebar-logo">
           <LayoutDashboard size={18} />
@@ -92,7 +92,7 @@ export default function AdminDashboard() {
         </div>
       </aside>
 
-      {/* Main */}
+
       <main className="admin-main">
         <div className="admin-main-header">
           <h1 className="admin-main-title">
@@ -104,7 +104,7 @@ export default function AdminDashboard() {
         {tab === 'projects' && <AdminProjects authFetch={authFetch} />}
       </main>
 
-      {/* Change Password Modal */}
+
       {pwModal && (
         <div className="admin-modal-backdrop" onClick={() => setPwModal(false)}>
           <div className="admin-modal" style={{ maxWidth: 400 }} onClick={e => e.stopPropagation()}>

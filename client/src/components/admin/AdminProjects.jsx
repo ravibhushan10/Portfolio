@@ -196,13 +196,11 @@ export default function AdminProjects({ authFetch }) {
     if (removeCover)               fd.append('removeCover', 'true')
     if (removeImageIds.length > 0) fd.append('removeImageIds', JSON.stringify(removeImageIds))
 
-    // Send final order of existing images
     const existingOrder = unifiedImages
       .filter(img => !img.isNew)
       .map(img => img.publicId)
     fd.append('imageOrder', JSON.stringify(existingOrder))
 
-    // Append new files in their dragged order
     unifiedImages
       .filter(img => img.isNew && img.file)
       .forEach(img => fd.append('images', img.file))
@@ -254,7 +252,6 @@ export default function AdminProjects({ authFetch }) {
   return (
     <div className="admin-tab-content">
 
-      {/* Toast */}
       {toast && (
         <div className={`admin-toast ${toast.type}`}>
           {toast.type === 'success' ? <CheckCircle2 size={14} /> : <AlertCircle size={14} />}
@@ -262,7 +259,6 @@ export default function AdminProjects({ authFetch }) {
         </div>
       )}
 
-      {/* Header */}
       <div className="admin-projects-header">
         <div className="admin-projects-count">
           <span className="admin-count-num">{projects.length}</span>
@@ -273,7 +269,6 @@ export default function AdminProjects({ authFetch }) {
         </button>
       </div>
 
-      {/* Projects list */}
       {loading ? (
         <div className="admin-loading">
           <span className="admin-spinner-lg" />
@@ -348,7 +343,6 @@ export default function AdminProjects({ authFetch }) {
         </div>
       )}
 
-      {/* ── Modal ── */}
       {modal && (
         <div className="admin-modal-backdrop" onClick={closeModal}>
           <div className="admin-modal admin-modal-wide" onClick={e => e.stopPropagation()}>
@@ -370,7 +364,6 @@ export default function AdminProjects({ authFetch }) {
                 </div>
               )}
 
-              {/* ── Section: Basic Info ── */}
               <div className="admin-modal-section">
                 <div className="admin-modal-section-title">Basic Info</div>
                 <div className="admin-form-row">
@@ -401,7 +394,6 @@ export default function AdminProjects({ authFetch }) {
                 </div>
               </div>
 
-              {/* ── Section: Links & Meta ── */}
               <div className="admin-modal-section">
                 <div className="admin-modal-section-title">Links & Meta</div>
                 <div className="admin-form-row">
@@ -434,7 +426,6 @@ export default function AdminProjects({ authFetch }) {
                 </div>
               </div>
 
-              {/* ── Section: Cover Image ── */}
               <div className="admin-modal-section">
                 <div className="admin-modal-section-title">Cover Image</div>
 
@@ -483,7 +474,7 @@ export default function AdminProjects({ authFetch }) {
                 )}
               </div>
 
-              {/* ── Section: Carousel Images ── */}
+
               <div className="admin-modal-section">
                 <div className="admin-modal-section-title-row">
                   <div className="admin-modal-section-title">Carousel Images</div>
@@ -534,7 +525,7 @@ export default function AdminProjects({ authFetch }) {
                 </label>
               </div>
 
-              {/* ── Visibility ── */}
+              
               <div className="admin-form-group admin-checkbox-row">
                 <label className="admin-checkbox-label">
                   <input type="checkbox" name="isVisible"

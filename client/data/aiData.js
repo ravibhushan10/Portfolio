@@ -81,7 +81,6 @@ export const portfolioData = {
   },
 };
 
-// AI Assistant System Instruction Generator
 export const generateSystemInstruction = () => {
   const { personal, contact, skills, projects, experience, education } = portfolioData;
 

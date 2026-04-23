@@ -5,15 +5,12 @@ const resend = new Resend(process.env.RESEND_API_KEY)
 const FROM    = process.env.EMAIL_FROM || 'Portfolio Contact <onboarding@codeforgeai.in>'
 const INBOX   = process.env.EMAIL_TO   || 'codeforge.coder@gmail.com'
 
-/* ─────────────────────────────────────────────────────────────────────────
-   sendContactNotification
-   Sends a notification to YOUR inbox when someone fills the contact form
-──────────────────────────────────────────────────────────────────────────*/
+
 export const sendContactNotification = async ({ fullName, email, phone, subject, message, id }) => {
   const { error } = await resend.emails.send({
     from   : FROM,
     to     : [INBOX],
-    replyTo: email,                            // reply goes straight to the visitor
+    replyTo: email,
     subject: `[Portfolio] ${subject} — from ${fullName}`,
     html   : `
       <!DOCTYPE html>
@@ -78,10 +75,7 @@ export const sendContactNotification = async ({ fullName, email, phone, subject,
   if (error) throw new Error(error.message)
 }
 
-/* ─────────────────────────────────────────────────────────────────────────
-   sendAutoReply
-   Sends a confirmation email to the visitor who contacted you
-──────────────────────────────────────────────────────────────────────────*/
+
 export const sendAutoReply = async ({ fullName, email }) => {
   const { error } = await resend.emails.send({
     from   : FROM,

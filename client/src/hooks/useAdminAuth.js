@@ -8,7 +8,7 @@ export function useAdminAuth() {
   const [isVerifying, setIsVerifying] = useState(true)
   const [isAuthed,    setIsAuthed]    = useState(false)
 
-  // Verify token on mount
+
   useEffect(() => {
     if (!token) { setIsVerifying(false); return }
     fetch(`${API}/admin/me`, {
@@ -24,7 +24,7 @@ export function useAdminAuth() {
       })
       .catch(() => { setIsAuthed(false) })
       .finally(() => setIsVerifying(false))
-  }, [])  // eslint-disable-line
+  }, [])
 
   const login = useCallback(async (password) => {
     const res  = await fetch(`${API}/admin/login`, {
@@ -53,7 +53,7 @@ export function useAdminAuth() {
   const res = await fetch(`${API}/admin${path}`, {
     ...options,
     headers: {
-      // Only set Content-Type for JSON — never for FormData
+      
       ...(!isFormData && options.headers ? options.headers : {}),
       Authorization: `Bearer ${token}`,
     },

@@ -9,7 +9,7 @@ import Admin  from '../models/Admin.js'
 const seedAdmin = async () => {
   try {
     const existing = await Admin.findOne({ username: 'admin' })
-    if (existing) return  // already seeded
+    if (existing) return  
 
     const plain = process.env.ADMIN_PASSWORD
     if (!plain) {

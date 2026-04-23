@@ -34,7 +34,7 @@ const contactSchema = new mongoose.Schema(
       minlength: [10,   'Message must be at least 10 characters'],
       maxlength: [2000, 'Message cannot exceed 2000 characters'],
     },
-    // ── Admin management fields ──────────────────────
+
     isRead: {
       type   : Boolean,
       default: false,

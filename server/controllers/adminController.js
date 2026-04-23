@@ -1,9 +1,7 @@
 import jwt   from 'jsonwebtoken'
 import Admin from '../models/Admin.js'
 
-/* ─────────────────────────────────────────────────────
-   POST /api/admin/login
-───────────────────────────────────────────────────── */
+
 export const adminLogin = async (req, res) => {
   try {
     const { password } = req.body
@@ -38,18 +36,12 @@ export const adminLogin = async (req, res) => {
   }
 }
 
-/* ─────────────────────────────────────────────────────
-   GET /api/admin/me   (protected)
-   Just verifies token is still valid
-───────────────────────────────────────────────────── */
+
 export const getMe = async (req, res) => {
   return res.json({ success: true, admin: req.admin })
 }
 
-/* ─────────────────────────────────────────────────────
-   PATCH /api/admin/password  (protected)
-   Change admin password
-───────────────────────────────────────────────────── */
+
 export const changePassword = async (req, res) => {
   try {
     const { currentPassword, newPassword } = req.body

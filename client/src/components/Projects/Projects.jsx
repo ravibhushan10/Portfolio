@@ -4,24 +4,18 @@ import { Github, ExternalLink, X, ChevronLeft, ChevronRight } from 'lucide-react
 const API = import.meta.env.VITE_API_URL
 const PER_PAGE = 3
 
-/* ─────────────────────────────────────────────────────
-   Cloudinary URL transformer
-   Adds f_auto,q_auto + optional width resize.
-   Falls back gracefully for non-Cloudinary URLs.
-───────────────────────────────────────────────────── */
+
 function cloudinaryUrl(url, { width } = {}) {
   if (!url || typeof url !== 'string') return ''
   if (!url) return ''
   if (!url.includes('res.cloudinary.com')) return url
   const transforms = ['f_auto', 'q_auto']
   if (width) transforms.push(`w_${width}`, 'c_limit')
-  // Insert transforms after /upload/
+
   return url.replace('/upload/', `/upload/${transforms.join(',')}/`)
 }
 
-/* ─────────────────────────────────────────────────────
-   Lazy image component — only loads when in viewport
-───────────────────────────────────────────────────── */
+
 function LazyImage({ src, alt, className, width }) {
   const [visible, setVisible] = useState(false)
   const [loaded,  setLoaded]  = useState(false)
@@ -38,7 +32,7 @@ function LazyImage({ src, alt, className, width }) {
 
   return (
     <div ref={ref} className={`lazy-img-wrap ${loaded ? 'loaded' : ''}`}>
-      {/* Low-quality placeholder blur while loading */}
+
       {visible && !loaded && <div className="lazy-img-shimmer" />}
       {optimisedSrc && (
         <img
@@ -65,7 +59,7 @@ export default function Projects() {
 
 useEffect(() => {
   const fetchProjects = async () => {
-    // Check cache first
+
     const cached = sessionStorage.getItem('portfolio_projects')
     if (cached) {
       setProjects(JSON.parse(cached))
@@ -78,7 +72,7 @@ useEffect(() => {
       const data = await res.json()
       if (data.success) {
         setProjects(data.data)
-        sessionStorage.setItem('portfolio_projects', JSON.stringify(data.data))  // ← cache it
+        sessionStorage.setItem('portfolio_projects', JSON.stringify(data.data))
       } else {
         setError('Failed to load projects')
       }
@@ -91,7 +85,7 @@ useEffect(() => {
   fetchProjects()
 }, [])
 
-  // Lock scroll + keyboard close for modal
+
   useEffect(() => {
     if (!selected) { document.body.style.overflow = ''; return }
     document.body.style.overflow = 'hidden'
@@ -103,14 +97,14 @@ useEffect(() => {
   const open = p => {
     setSelected(p)
     setImgIdx(0)
-    // Fire view counter — non-blocking
+
     fetch(`${API}/projects/${p._id}/view`, { method: 'POST' }).catch(() => {})
   }
   const close = () => setSelected(null)
   const prev  = () => setImgIdx(i => (i - 1 + selected.images.length) % selected.images.length)
   const next  = () => setImgIdx(i => (i + 1) % selected.images.length)
 
-  // Skeleton card
+
   const Skeleton = () => (
     <div className="project-card skeleton-card">
       <div className="skeleton skeleton-img" />
@@ -196,7 +190,7 @@ useEffect(() => {
         </div>
       </section>
 
-      {/* ── Modal ── */}
+
       {selected && (
         <div className="modal-backdrop" onClick={close}>
           <div className="modal-box" onClick={e => e.stopPropagation()}>
@@ -204,7 +198,7 @@ useEffect(() => {
               <X size={15} />
             </button>
 
-            {/* Carousel */}
+
             {selected.images?.length > 0 && (
               <div className="modal-carousel">
                 <LazyImage

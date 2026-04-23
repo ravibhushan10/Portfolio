@@ -70,9 +70,7 @@
   --border-a: rgba(217,119,6,.3);
 }
 
-/* ───────────────────────────────────────────────
-   RESET
-─────────────────────────────────────────────── */
+
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 html { scroll-behavior: smooth; scroll-padding-top: var(--nav-h); font-size: 16px; }
 body {
@@ -90,7 +88,7 @@ button { cursor: pointer; font-family: inherit; border: none; background: none; 
 ul, ol { list-style: none; }
 input, textarea { font-family: inherit; }
 
-/* Noise grain overlay */
+
 body::after {
   content: '';
   position: fixed; inset: 0;
@@ -99,17 +97,13 @@ body::after {
   opacity: .45;
 }
 
-/* ───────────────────────────────────────────────
-   SCROLLBAR
-─────────────────────────────────────────────── */
+
 ::-webkit-scrollbar { width: 5px; }
 ::-webkit-scrollbar-track { background: var(--bg-1); }
 ::-webkit-scrollbar-thumb { background: var(--a-dim); border-radius: 3px; }
 ::-webkit-scrollbar-thumb:hover { background: var(--a); }
 
-/* ───────────────────────────────────────────────
-   KEYFRAMES
-─────────────────────────────────────────────── */
+
 @keyframes fadeUp {
   from { opacity: 0; transform: translateY(30px); }
   to   { opacity: 1; transform: translateY(0); }
@@ -138,9 +132,7 @@ body::after {
   50% { transform: translateY(-8px); }
 }
 
-/* ───────────────────────────────────────────────
-   HELPERS
-─────────────────────────────────────────────── */
+
 .mono { font-family: var(--mono); }
 .serif { font-family: var(--serif); }
 
@@ -195,9 +187,7 @@ body::after {
   margin-inline: auto;
 }
 
-/* ───────────────────────────────────────────────
-   BUTTONS
-─────────────────────────────────────────────── */
+
 .btn {
   display: inline-flex;
   align-items: center;
@@ -233,9 +223,7 @@ body::after {
   border-color: var(--a);
 }
 
-/* ───────────────────────────────────────────────
-   NAVBAR
-─────────────────────────────────────────────── */
+
 .navbar {
   position: fixed;
   top: 0; left: 0; right: 0;
@@ -290,14 +278,14 @@ body::after {
   border-radius: 2px;
 }
 
-/* Right-side group */
+
 .navbar-right {
   display: flex;
   align-items: center;
   gap: .75rem;
 }
 
-/* Theme toggle button */
+
 .theme-toggle {
   width: 34px; height: 34px;
   border-radius: var(--r-sm);
@@ -314,7 +302,7 @@ body::after {
   background: var(--a-mist);
 }
 
-/* Open to work pill */
+
 .navbar-pill {
   display: flex;
   align-items: center;
@@ -355,9 +343,7 @@ body::after {
 .scroll-top-btn.visible { opacity: 1; transform: translateY(0); pointer-events: auto; }
 .scroll-top-btn:hover { transform: translateY(-3px); }
 
-/* ───────────────────────────────────────────────
-   HERO
-─────────────────────────────────────────────── */
+
 .hero {
   min-height: 100vh;
   display: flex;
@@ -367,7 +353,7 @@ body::after {
   padding: 0 2rem;
 }
 
-/* Dot grid */
+
 .hero-dotgrid {
   position: absolute; inset: 0;
   background-image: radial-gradient(rgba(245,158,11,.13) 1px, transparent 1px);
@@ -376,7 +362,7 @@ body::after {
   pointer-events: none;
 }
 
-/* Ambient glow blobs */
+
 .hero-blob-1 {
   position: absolute;
   width: 560px; height: 400px;
@@ -407,7 +393,7 @@ body::after {
   z-index: 1;
 }
 
-/* Left content */
+
 .hero-content { animation: fadeUp .65s var(--ease) both; }
 
 .hero-eyebrow {
@@ -490,7 +476,7 @@ body::after {
   transform: translateY(-2px);
 }
 
-/* Right: Terminal */
+
 .hero-terminal-wrap { animation: fadeUp .65s var(--ease) .15s both; }
 
 .terminal-card {
@@ -507,7 +493,7 @@ box-shadow:
   0 24px 64px rgba(0, 0, 0, 0.55),
   inset 0 1px 0 rgba(255, 255, 255, 0.04);
 }
-/* Amber line at top */
+
 .terminal-card::before {
   content: '';
   position: absolute; top: 0; left: 0; right: 0;
@@ -562,7 +548,7 @@ box-shadow:
 .t-dim    { color: var(--g4); }
 .t-spacer { height: .5rem; }
 
-/* Typed field variants */
+
 .t-field-str  { color: #86efac; }
 .t-field-bool { color: #f9a8d4; }
 
@@ -592,9 +578,7 @@ box-shadow:
 }
 
 
-/* ───────────────────────────────────────────────
-   PROJECTS
-─────────────────────────────────────────────── */
+
 .projects-section { padding: var(--section-pad); }
 
 .projects-grid {
@@ -613,7 +597,7 @@ box-shadow:
   transition: transform .3s var(--ease), border-color .25s, box-shadow .3s;
   position: relative;
 }
-/* top amber accent on hover */
+
 .project-card::after {
   content: '';
   position: absolute; top: 0; left: 0; right: 0;
@@ -713,7 +697,7 @@ box-shadow:
   margin-top: 2.5rem;
 }
 
-/* Project Modal */
+
 .modal-backdrop {
   position: fixed; inset: 0;
   background: rgba(0,0,0,.88);
@@ -774,9 +758,7 @@ box-shadow:
 .modal-feature::before { content: '▹'; color: var(--a); flex-shrink: 0; margin-top: 1px; }
 .modal-actions { display: flex; gap: .875rem; margin-top: 1.75rem; }
 
-/* ───────────────────────────────────────────────
-   SKILLS
-─────────────────────────────────────────────── */
+
 .skills-section   { padding: var(--section-pad); background: var(--bg-1); }
 .skills-grid {
   display: grid;
@@ -829,9 +811,7 @@ box-shadow:
 }
 .skill-item:hover .skill-item-icon { transform: scale(1.15); }
 
-/* ───────────────────────────────────────────────
-   CONTACT
-─────────────────────────────────────────────── */
+
 .contact-section { padding: 8rem 0 0; }
 
 .contact-hero-text { text-align: center; margin-bottom: 5rem; }
@@ -908,7 +888,7 @@ box-shadow:
 .chip-amber { background: var(--a-mist); border-color: rgba(245,158,11,.22); color: var(--a-lt); }
 .chip-green { background: rgba(134,239,172,.05); border-color: rgba(134,239,172,.18); color: #86efac; }
 
-/* Form */
+
 .contact-form-wrap {
   background: var(--bg-1);
   border: 1px solid var(--border);
@@ -973,7 +953,7 @@ box-shadow:
   animation: spinSlow .65s linear infinite;
 }
 
-/* Toast */
+
 .toast-notification {
   position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%);
   display: flex; align-items: center; gap: .75rem;
@@ -989,9 +969,7 @@ box-shadow:
 .toast-success { background: rgba(134,239,172,.1); border: 1px solid rgba(134,239,172,.25); color: #86efac; }
 .toast-error   { background: rgba(248,113,113,.1); border: 1px solid rgba(248,113,113,.25); color: #f87171; }
 
-/* ───────────────────────────────────────────────
-   FOOTER
-─────────────────────────────────────────────── */
+
 .footer-strip {
   margin-top: 6rem;
   padding: 1.5rem 2.5rem;
@@ -1034,14 +1012,14 @@ body {
 }
 
 
-/* ── Add these rules to your existing contact CSS ─────────────────────────── */
 
-/* Field-level error text — appears below the input */
+
+
 .field-error {
   display     : block;
   margin-top  : 5px;
   font-size   : 0.75rem;
-  color       : #f87171;          /* red-400 */
+  color       : #f87171;
   font-weight : 500;
   line-height : 1.3;
   animation   : errorFadeIn 0.18s ease;
@@ -1053,13 +1031,13 @@ body {
 }
 
 
-/* Same for textarea */
+
 .form-textarea.input-error {
   border-color: #f87171 !important;
   box-shadow  : 0 0 0 2px rgba(248, 113, 113, 0.15);
 }
 
-/* Character counter below textarea */
+
 .char-counter {
   text-align  : right;
   font-size   : 0.72rem;
@@ -1072,7 +1050,7 @@ body {
   font-weight: 600;
 }
 
-/* Generic server/rate-limit error — inside the form, above the button */
+
 .generic-error {
   margin        : 16px 0 4px;
   padding       : 12px 16px;
@@ -1085,7 +1063,7 @@ body {
   animation     : errorFadeIn 0.2s ease;
 }
 
-/* Success message — inside the form, above the button */
+
 .generic-success {
   margin        : 16px 0 4px;
   padding       : 12px 16px;
@@ -1097,11 +1075,9 @@ body {
   font-weight   : 500;
   animation     : errorFadeIn 0.2s ease;
 }
-/* ═══════════════════════════════════════════════════
-   RESPONSIVE — GLOBAL
-═══════════════════════════════════════════════════ */
 
-/* ── Tablet (768–1023px) ── */
+
+
 @media (max-width: 1024px) {
   .skills-grid        { grid-template-columns: 1fr 1fr; }
   .contact-grid       { grid-template-columns: 1fr; }
@@ -1111,16 +1087,16 @@ body {
   .modal-box          { max-width: 80vw; }
 }
 
-/* ── Mobile (≤ 768px) ── */
+
 @media (max-width: 768px) {
-  /* Navbar */
+
   .navbar             { padding: 0 1.25rem; }
   .navbar-links       { gap: 0; }
   .navbar-link        { padding: .35rem .55rem; font-size: .78rem; }
   .navbar-pill        { display: none; }
   .navbar-right       { gap: .5rem; }
 
-  /* Hero */
+
   .hero-inner {
     grid-template-columns: 1fr;
     text-align: center;
@@ -1135,15 +1111,15 @@ body {
   .hero-socials         { justify-content: center; }
   .hero-eyebrow         { justify-content: center; }
 
-  /* Terminal — prevent horizontal overflow */
+
   .terminal-body        { padding: 1rem; font-size: .75rem; min-height: auto; }
   .t-tags-row           { padding-left: 0; }
 
-  /* Projects */
+
   .projects-grid        { grid-template-columns: 1fr; }
   .projects-section     { padding: 4rem 0; }
 
-  /* Project Modal — full-screen on mobile */
+
   .modal-backdrop       { padding: 0; align-items: flex-end; }
   .modal-box {
     max-width: 100%;
@@ -1156,11 +1132,11 @@ body {
   .modal-actions        { flex-direction: column; }
   .modal-close          { top: .75rem; right: .75rem; }
 
-  /* Skills */
+
   .skills-grid          { grid-template-columns: 1fr 1fr; }
   .skills-section       { padding: 4rem 0; }
 
-  /* Contact */
+
   .contact-section      { padding: 4rem 0 0; }
   .contact-big-title    { font-size: clamp(2rem, 7vw, 3rem); }
   .contact-hero-text    { margin-bottom: 3rem; }
@@ -1168,40 +1144,40 @@ body {
   .contact-info-list    { grid-template-columns: 1fr; }
   .contact-form-wrap    { padding: 1.25rem; }
 
-  /* Footer */
+
   .footer-strip         { justify-content: center; text-align: center; }
 
-  /* Scroll-to-top */
+
   .scroll-top-btn       { bottom: 1.5rem; right: 1.25rem; }
 }
 
-/* ── Small mobile (≤ 480px) ── */
+
 @media (max-width: 480px) {
   .skills-grid          { grid-template-columns: 1fr; }
   .hero-headline        { font-size: clamp(2.2rem, 9vw, 3rem); }
   .navbar-link          { padding: .3rem .45rem; font-size: .74rem; }
   .section-wrap         { padding: 0 1rem; }
 
-  /* Hide logo text label on very small screens */
+
   .navbar-logo span     { display: none; }
 
-  /* Projects grid card min comfortable width */
+
   .projects-grid        { gap: 1rem; }
   .project-img-wrap     { height: 170px; }
 
-  /* Contact form */
+
   .contact-form-wrap    { padding: 1rem; border-radius: var(--r-lg); }
 
-  /* Hero terminal compact */
+
   .terminal-body        { font-size: .72rem; min-height: 220px; }
   .t-tag                { font-size: .63rem; padding: .08rem .35rem; }
 
-  /* Buttons compact */
+
   .btn                  { padding: .6rem 1.1rem; font-size: .82rem; }
   .hero-actions         { gap: .5rem; }
 }
 
-/* ── Extra small (≤ 360px) ── */
+
 @media (max-width: 360px) {
   .hero-headline        { font-size: clamp(1.9rem, 8vw, 2.4rem); }
   .navbar-logo          { font-size: .9rem; }
