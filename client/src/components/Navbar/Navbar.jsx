@@ -2,11 +2,12 @@ import { useEffect, useState } from 'react'
 import { FaSun, FaMoon, FaUserCircle } from 'react-icons/fa'
 
 const NAV_LINKS = [
-  { id: 'home',     label: 'Home'     },
-  { id: 'about',    label: 'About'    },
-  { id: 'projects', label: 'Projects' },
-  { id: 'skills',   label: 'Skills'   },
-  { id: 'contact',  label: 'Contact'  },
+  { id: 'home',       label: 'Home'       },
+  { id: 'about',      label: 'About'      },
+  { id: 'projects',   label: 'Projects'   },
+  { id: 'skills',     label: 'Skills'     },
+  // { id: 'experience', label: 'Experience' },
+  { id: 'contact',    label: 'Contact'    },
 ]
 
 

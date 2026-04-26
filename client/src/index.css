@@ -161,11 +161,7 @@ body::after {
   color: var(--a);
   margin-bottom: 1.1rem;
 }
-.section-tag::before {
-  content: '//';
-  opacity: .45;
-  font-weight: 600;
-}
+
 
 .section-title {
   font-family: var(--font);
